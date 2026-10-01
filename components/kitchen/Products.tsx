@@ -7,6 +7,7 @@ import * as THREE from "three";
 import type { Product } from "@/lib/types";
 import type { Location } from "@/lib/layout";
 import { SLOTS_PER_SHELF } from "@/lib/layout";
+import { CAN_IDS } from "@/lib/cans";
 import { BOWL, ZONES } from "./zones";
 import { labelTexture, loadPhoto, rand, shelfTagTexture } from "./textures";
 import { canGeometry, canLabelTexture } from "./cans";
@@ -229,11 +230,11 @@ function ProductUnitsInner({ p, loc, stock, price, visual, onHover, onSelect }: 
     m.instanceMatrix.needsUpdate = true;
     m.computeBoundingSphere();
   }, [units]);
-  // shelves read as stocked: visible units saturate with stock (front rows fill first); bowl fruit stays 1:1
-  const visible = loc.zone === "fruit_bowl"
+  // shelves read as stocked: visible units saturate with stock (front rows fill first); bowl fruit and camera-counted cans stay 1:1
+  const visible = loc.zone === "fruit_bowl" || CAN_IDS.includes(p.id)
     ? Math.min(units.length, Math.max(0, Math.ceil(stock / (PER_UNIT[p.id] ?? 1))))
     : stock <= 0 ? 0 : Math.min(units.length, Math.max(1, Math.ceil(units.length * (1 - Math.exp(-stock / 12)))));
-  useLayoutEffect(() => { if (mesh.current) mesh.current.count = visible; }, [visible]);
+  useLayoutEffect(() => { if (mesh.current) mesh.current.count = visible; }, [visible, units]);
 
   const v = useRef(visual);
   v.current = visual;

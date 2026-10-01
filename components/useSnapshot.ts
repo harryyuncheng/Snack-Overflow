@@ -1,11 +1,20 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Snapshot } from "@/lib/snapshot";
 
-export function useSnapshot() {
+export function useSnapshot(pollMs?: number) {
   const [data, setData] = useState<Snapshot | null>(null);
-  const refresh = useCallback(async () => { const r = await fetch("/api/state", { cache: "no-store" }); setData(await r.json()); }, []);
-  useEffect(() => { refresh(); }, [refresh]);
+  const last = useRef("");
+  const refresh = useCallback(async () => {
+    const text = await (await fetch("/api/state", { cache: "no-store" })).text();
+    if (text !== last.current) { last.current = text; setData(JSON.parse(text)); }
+  }, []);
+  useEffect(() => {
+    refresh();
+    if (!pollMs) return;
+    const t = setInterval(refresh, pollMs);
+    return () => clearInterval(t);
+  }, [refresh, pollMs]);
   return { data, refresh };
 }
 

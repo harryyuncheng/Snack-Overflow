@@ -11,7 +11,7 @@ export default function Nav() {
         <span className="grid h-6 w-6 place-items-center rounded-md bg-highlight text-[13px]">S</span>{APP_NAME}
       </Link>
       <nav className="flex gap-1">
-        {[["/", "Kitchen"], ["/dashboard", "Dashboard"]].map(([href, label]) => (
+        {[["/", "Kitchen"], ["/dashboard", "Dashboard"], ["/camera", "Camera"]].map(([href, label]) => (
           <Link key={href} href={href} className={`rounded-md px-3 py-1.5 text-sm ${path === href ? "bg-bone text-ink" : "text-ash hover:text-ink"}`}>{label}</Link>
         ))}
       </nav>

@@ -7,6 +7,7 @@ import type {
 export { rng, DAY_KEYS, dayKey, DAY, BASELINE_SUPPLIER, BASELINE_OVERBUY, baselineWeeklyUnits, round2, startOfDay } from "./seed-utils";
 import { rng, dayKey, DAY, BASELINE_SUPPLIER, baselineWeeklyUnits, round2, startOfDay } from "./seed-utils";
 import { simulate } from "./timeline";
+import { CAN_IDS } from "./cans";
 import { officeData, requestRows, settingsData, supplierRows } from "./data";
 
 const SUPPLIERS = supplierRows;
@@ -31,13 +32,14 @@ export function generateSeed(now = Date.now()) {
     }
   }
 
-  const sim = simulate({ now, office, products, offers });
+  const tracked = products.filter((p) => !CAN_IDS.includes(p.id)); // camera-counted drinks have no seeded history
+  const sim = simulate({ now, office, products: tracked, offers });
   const simStart = Date.parse(sim.timeline.start);
   // 8 weeks of daily history before the hourly simulation window
   const consumption: ConsumptionEvent[] = [];
   const start = startOfDay(simStart - 56 * DAY);
   let eid = 0;
-  const live = products.filter((p) => !p.trial);
+  const live = tracked.filter((p) => !p.trial);
   for (let t = start; t < simStart; t += DAY) {
     const dk = dayKey(new Date(t));
     if (!dk) continue;

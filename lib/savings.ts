@@ -1,6 +1,7 @@
 import type { DB } from "./seed";
 import { BASELINE_SUPPLIER, baselineWeeklyUnits, round2 } from "./seed";
 import { catalogMeta, products as catalog } from "./catalog";
+import { CAN_IDS } from "./cans";
 import { productStats, quadrants, weeklyPersonDays, type ProductStats } from "./analytics";
 import type { Settings } from "./types";
 
@@ -17,7 +18,7 @@ export function computeLevers(db: DB, stats: ProductStats[]) {
   const trial = new Set(db.products.filter((p) => p.trial).map((p) => p.id));
   const quad = quadrants(stats, trial);
   // the "before" world only knew the original catalog (items the agent trialed later aren't in the baseline)
-  const original = new Set(catalog.filter((p) => !p.trial).map((p) => p.id));
+  const original = new Set(catalog.filter((p) => !p.trial && !CAN_IDS.includes(p.id)).map((p) => p.id));
   const live = db.products.filter((p) => original.has(p.id));
   const avgPop = live.reduce((a, p) => a + catalogMeta[p.id].pop, 0) / live.length;
   const wpd = weeklyPersonDays(db);
