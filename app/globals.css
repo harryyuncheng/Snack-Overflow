@@ -1,0 +1,6 @@
+@import "tailwindcss";
+body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+.card { @apply rounded-xl bg-white p-4 shadow-sm ring-1 ring-black/5; }
+.btn { @apply rounded-lg bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-50; }
+.btn-ghost { @apply rounded-lg px-3 py-1.5 text-sm font-medium ring-1 ring-slate-300 hover:bg-slate-100; }
+.chip { @apply rounded-full px-2 py-0.5 text-xs font-medium; }
