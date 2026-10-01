@@ -19,8 +19,8 @@ export default function Timeline({ tl, index, onChange, playing, setPlaying }: {
   }, [playing]); // eslint-disable-line react-hooks/exhaustive-deps
   const frame = tl.frames[index];
   const pos = (iso: string) => { const t = Date.parse(iso); const i = tl.frames.findIndex((f) => Date.parse(f.t) >= t); return ((i < 0 ? n : i) / n) * 100; };
-  const switchPos = pos(tl.switchAt), nowPos = (tl.nowIndex / n) * 100;
-  const phase = frame.projected ? "Projected" : Date.parse(frame.t) < Date.parse(tl.switchAt) ? "Before Snack Overflow" : "Snack Overflow on";
+  const nowPos = (tl.nowIndex / n) * 100;
+  const phase = frame.projected ? "Projected" : Date.parse(frame.t) < Date.parse(tl.switchAt) ? "Before Snack Overflow" : "";
   const recent = tl.events.filter((e) => Date.parse(e.t) <= Date.parse(frame.t) && !["restock_request", "back_in_stock"].includes(e.kind)).slice(-1)[0];
   const units = frame.stock.reduce((a, b) => a + b, 0), skus = frame.stock.filter((x) => x > 0).length;
   return (
@@ -28,7 +28,7 @@ export default function Timeline({ tl, index, onChange, playing, setPlaying }: {
       <div className="flex items-center gap-4">
         <button onClick={() => setPlaying(!playing)} className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-highlight text-ink" aria-label={playing ? "Pause" : "Play"}>{playing ? "❚❚" : "▶"}</button>
         <div className="w-44 shrink-0">
-          <div className="text-[10px] uppercase tracking-[0.18em] text-ash">{phase}</div>
+          <div className="text-[10px] uppercase tracking-[0.18em] text-ash">{phase || "\u00a0"}</div>
           <div className="text-sm">{new Date(frame.t).toLocaleString(undefined, { weekday: "short", month: "short", day: "numeric", hour: "numeric" })}</div>
         </div>
         <div className="relative flex-1">
@@ -39,7 +39,6 @@ export default function Timeline({ tl, index, onChange, playing, setPlaying }: {
           <input type="range" className="timeline relative w-full" min={0} max={n} value={index} onChange={(e) => { setPlaying(false); onChange(+e.target.value); }} aria-label="Timeline" />
           <div className="relative h-4 text-[10px] uppercase tracking-[0.18em] text-ash">
             <span className="absolute" style={{ left: 0 }}>2 weeks ago</span>
-            <span className="absolute -translate-x-1/2 text-paper" style={{ left: `${switchPos}%` }}>▲ Snack Overflow on</span>
             <span className="absolute -translate-x-1/2 text-highlight" style={{ left: `${nowPos}%` }}>▲ Now</span>
             <span className="absolute right-0">Next week</span>
           </div>

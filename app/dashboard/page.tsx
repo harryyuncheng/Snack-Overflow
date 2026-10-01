@@ -202,6 +202,20 @@ export default function Dashboard() {
       </section>
 
       <section className="mx-auto mt-5 max-w-[1200px] px-5">
+        <div className="card">
+          <div className="label">Kitchen feed</div>
+          <div className="mt-3 space-y-2">
+            {data.feed.slice(0, 10).map((e, k) => (
+              <div key={k} className="flex gap-3 border-t border-hairline pt-2 text-[13px] first:border-0 first:pt-0">
+                <span className="w-14 shrink-0 text-[11px] text-ash">{new Date(e.t).toLocaleDateString(undefined, { weekday: "short" })} {new Date(e.t).getHours()}:00</span>
+                <span className={e.kind === "restock_request" ? "" : "text-ink/80"}>{e.kind === "restock_request" && <span className="tag-hi mr-1">restock</span>}{e.kind === "back_in_stock" && <span className="tag mr-1">back</span>}{e.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto mt-5 max-w-[1200px] px-5">
         <details className="card">
           <summary className="cursor-pointer text-[15px]">How we calculate this</summary>
           <ul className="mt-3 list-disc space-y-1.5 pl-5 text-[13px] text-ash">
