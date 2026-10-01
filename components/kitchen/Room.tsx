@@ -41,7 +41,7 @@ function Fridge({ zone, open, onToggle, body }: { zone: Zone; open: boolean; onT
         </mesh>
       ))}
       <mesh position={[cx, H - 0.125, zz + 0.3]}><boxGeometry args={[z.width * 0.8, 0.01, 0.06]} /><meshStandardMaterial color="#ffffff" emissive="#eef7ff" emissiveIntensity={2} /></mesh>
-      <group ref={door} position={[x - 0.1, 0, zz + D - 0.02]} onClick={(e) => { e.stopPropagation(); onToggle(); }}>
+      <group ref={door} position={[x - 0.1, 0, zz + D - 0.02]} onClick={(e) => { e.stopPropagation(); if (e.delta > 5) return; onToggle(); }}>
         <mesh position={[W / 2, H / 2, 0]}>
           <boxGeometry args={[W, H, 0.03]} />
           <meshStandardMaterial color="#d7ecff" roughness={0.05} metalness={0.1} transparent opacity={0.13} depthWrite={false} />

@@ -106,7 +106,7 @@
     ],
     "caloriesPerServing": 90,
     "model3d": {
-      "shape": "bottle",
+      "shape": "can",
       "color": "#f2b134"
     },
     "emoji": "🧋",

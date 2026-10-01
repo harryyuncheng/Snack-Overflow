@@ -9,10 +9,11 @@ import type { Location } from "@/lib/layout";
 import { SLOTS_PER_SHELF } from "@/lib/layout";
 import { BOWL, ZONES } from "./zones";
 import { labelTexture, loadPhoto, rand, shelfTagTexture } from "./textures";
+import { canGeometry, canLabelTexture } from "./cans";
 
 export type Shape = Product["model3d"]["shape"];
 export const SIZE: Record<Shape, [number, number, number]> = {
-  can: [0.12, 0.2, 0.12], bottle: [0.12, 0.3, 0.12], bag: [0.2, 0.28, 0.08], box: [0.19, 0.24, 0.08], bar: [0.17, 0.075, 0.032], fruit: [0.13, 0.13, 0.13], cup: [0.12, 0.1, 0.12],
+  can: [0.075, 0.135, 0.075], bottle: [0.12, 0.3, 0.12], bag: [0.2, 0.28, 0.08], box: [0.19, 0.24, 0.08], bar: [0.17, 0.075, 0.032], fruit: [0.13, 0.13, 0.13], cup: [0.12, 0.1, 0.12],
 };
 /** Per-product overrides where the generic shape size reads wrong. */
 const SIZE_BY_ID: Record<string, [number, number, number]> = {
@@ -50,7 +51,7 @@ function geometryFor(p: Product): THREE.BufferGeometry {
   const [w, h, d] = sizeFor(p);
   if (p.id === "babybel") return babybelGeometry([w, h, d]);
   switch (p.model3d.shape) {
-    case "can": return new THREE.CylinderGeometry(w / 2, w / 2 * 0.96, h, 24);
+    case "can": return canGeometry(w, h);
     case "cup": return new THREE.CylinderGeometry(w / 2, w / 2.5, h, 24);
     case "bottle": {
       const pts = [[0, 0], [0.058, 0], [0.06, 0.012], [0.06, 0.19], [0.034, 0.245], [0.022, 0.27], [0.024, 0.3], [0, 0.3]].map(([x, y]) => new THREE.Vector2(x, y - h / 2));
@@ -117,7 +118,7 @@ function unitLayout(p: Product, loc: Location): Unit[] {
         const x = z.origin[0] + loc.slot * slotW + 0.04 + gap / 2 + c * (w + gap) + w / 2 + jx;
         const zz = z.origin[2] + 0.03 + row * (d + 0.03) + d / 2 + jz;
         let y = y0 + h / 2 + layer * (h + 0.004);
-        const rot: [number, number, number] = [0, (r(i, 2) - 0.5) * (p.model3d.shape === "can" || p.model3d.shape === "bottle" || p.model3d.shape === "cup" ? 2.4 : 0.22), 0];
+        const rot: [number, number, number] = [0, (r(i, 2) - 0.5) * (p.model3d.shape === "can" ? 0.5 : p.model3d.shape === "bottle" || p.model3d.shape === "cup" ? 2.4 : 0.22), 0];
         const front = row === rows - 1 && layer === 0;
         const odd = r(i, 3);
         if (p.model3d.shape === "bag") {
@@ -191,20 +192,25 @@ function ProductUnitsInner({ p, loc, stock, price, visual, onHover, onSelect }: 
       const side = new THREE.MeshStandardMaterial({ color: p.model3d.color, roughness: 0.7, metalness: 0, transparent: true });
       return withBase({ list: [side, side, side, side, label, side], label, all: [label, side] });
     }
-    if (shape === "can" || shape === "cup") {
-      // cups: foil lid shows the photo; cans: brushed aluminium ends
-      const cap = new THREE.MeshStandardMaterial({ color: shape === "can" ? "#c8ccd0" : "#e9e6df", metalness: shape === "can" ? 0.9 : 0.6, roughness: 0.3, transparent: true });
-      return withBase({ list: shape === "cup" ? [label, label, cap] : [label, cap, cap], label, all: [label, cap] });
+    if (shape === "can") {
+      // printed aluminium: one drawn brand label wrapped once around the body, metal ends baked into the same texture
+      const can = new THREE.MeshStandardMaterial({ map: canLabelTexture(p), roughness: 0.26, metalness: 0.55, transparent: true });
+      return withBase({ list: [can], label: can, all: [can] });
+    }
+    if (shape === "cup") {
+      // cups: foil lid shows the photo
+      const cap = new THREE.MeshStandardMaterial({ color: "#e9e6df", metalness: 0.6, roughness: 0.3, transparent: true });
+      return withBase({ list: [label, label, cap], label, all: [label, cap] });
     }
     return withBase({ list: [label], label, all: [label] });
   }, [p, shape, isFruit, modelFruit, photoFace, fruitModel]);
 
   // swap in the real product photo when it arrives
   useEffect(() => {
-    if (isFruit || modelFruit) return;
+    if (isFruit || modelFruit || shape === "can") return;
     loadPhoto(p, (t) => {
       let tex = t;
-      if (shape === "can" || shape === "cup" || shape === "bottle") {
+      if (shape === "cup" || shape === "bottle") {
         tex = t.clone();
         tex.wrapS = THREE.RepeatWrapping; tex.repeat.set(2, 1); tex.offset.set(0.25, 0);
         tex.needsUpdate = true;
@@ -270,10 +276,10 @@ function ProductUnitsInner({ p, loc, stock, price, visual, onHover, onSelect }: 
         castShadow receiveShadow frustumCulled={false}
         onPointerOver={(e: ThreeEvent<PointerEvent>) => { e.stopPropagation(); onHover(p.id, top); document.body.style.cursor = "pointer"; }}
         onPointerOut={() => { onHover(null); document.body.style.cursor = "auto"; }}
-        onClick={(e: ThreeEvent<MouseEvent>) => { e.stopPropagation(); onSelect(p.id); }}
+        onClick={(e: ThreeEvent<MouseEvent>) => { e.stopPropagation(); if (e.delta > 5) return; onSelect(p.id); }}
       />
       {tagPos && (
-        <mesh position={tagPos} onClick={(e) => { e.stopPropagation(); onSelect(p.id); }}>
+        <mesh position={tagPos} onClick={(e) => { e.stopPropagation(); if (e.delta > 5) return; onSelect(p.id); }}>
           <planeGeometry args={[0.2, 0.05]} />
           <meshBasicMaterial map={tag} color={visible === 0 ? "#ffd2c8" : "#ffffff"} toneMapped={false} />
         </mesh>

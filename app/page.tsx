@@ -93,7 +93,7 @@ export default function Kitchen() {
               )}
             </div>
           </div>
-          <div className="pointer-events-none absolute bottom-3 left-4 text-[11px] text-ash">Point to look · WASD to walk · Q/E to turn · scroll to step · click a snack</div>
+          <div className="pointer-events-none absolute bottom-3 left-4 text-[11px] text-ash">Drag to look around · WASD to walk · scroll to step · click a snack</div>
           {toast && <div className="absolute bottom-3 right-4 rounded-xl border border-hairline bg-paper px-4 py-2 text-sm">{toast}</div>}
         </div>
         <Timeline tl={tl} index={idx} onChange={setFrame} playing={playing} setPlaying={setPlaying} />

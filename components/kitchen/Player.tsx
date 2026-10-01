@@ -5,10 +5,9 @@ import * as THREE from "three";
 import type { Zone } from "@/lib/types";
 import { BOUNDS, ISLAND, stationFor } from "./zones";
 
-const BASE_YAW_LIMIT = THREE.MathUtils.degToRad(40); // heading from walking/Q-E/stations
-const YAW_LIMIT = THREE.MathUtils.degToRad(75); // heading + mouse look
+const YAW_LIMIT = THREE.MathUtils.degToRad(100); // keep the snack wall in view
 const PITCH_MIN = THREE.MathUtils.degToRad(-60), PITCH_MAX = THREE.MathUtils.degToRad(20);
-const MOUSE_YAW = THREE.MathUtils.degToRad(55), MOUSE_PITCH = THREE.MathUtils.degToRad(22);
+const DRAG_SPEED = 0.0045; // radians per dragged pixel
 const SPEED = 3.0, ACCEL = 9;
 const damp = (k: number, dt: number) => 1 - Math.exp(-k * dt);
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
@@ -32,7 +31,7 @@ export default function Player({ focusZone }: { focusZone: Zone | "overview" }) 
   const base = useRef(viewFor(start.pos, start.look)); // heading without mouse offset
   const look = useRef({ ...base.current }); // smoothed actual view
   const vel = useRef(new THREE.Vector3());
-  const mouse = useRef({ x: 0, y: 0, inside: false });
+  const drag = useRef<{ x: number; y: number; id: number } | null>(null);
   const glide = useRef<Glide | null>(null);
   const keys = useRef(new Set<string>());
   const wheel = useRef(0);
@@ -58,23 +57,31 @@ export default function Player({ focusZone }: { focusZone: Zone | "overview" }) 
     };
     const up = (e: KeyboardEvent) => keys.current.delete(e.key.toLowerCase());
     const blur = () => keys.current.clear();
+    // click-and-drag to look; a drag never counts as a click (R3F handlers check e.delta)
+    const pd = (e: PointerEvent) => { if (e.button !== 0) return; drag.current = { x: e.clientX, y: e.clientY, id: e.pointerId }; };
     const pm = (e: PointerEvent) => {
-      const r = el.getBoundingClientRect();
-      mouse.current.x = THREE.MathUtils.clamp(((e.clientX - r.left) / r.width) * 2 - 1, -1, 1);
-      mouse.current.y = THREE.MathUtils.clamp(((e.clientY - r.top) / r.height) * 2 - 1, -1, 1);
-      mouse.current.inside = true;
+      const d = drag.current;
+      if (!d || d.id !== e.pointerId) return;
+      const dx = e.clientX - d.x, dy = e.clientY - d.y;
+      d.x = e.clientX; d.y = e.clientY;
+      const b = base.current;
+      b.yaw = THREE.MathUtils.clamp(b.yaw + dx * DRAG_SPEED, -YAW_LIMIT, YAW_LIMIT);
+      b.pitch = THREE.MathUtils.clamp(b.pitch + dy * DRAG_SPEED, PITCH_MIN, PITCH_MAX);
+      glide.current = null;
+      el.style.cursor = "grabbing";
     };
-    const leave = () => { mouse.current.inside = false; };
+    const pu = () => { drag.current = null; el.style.cursor = ""; };
     const wh = (e: WheelEvent) => { e.preventDefault(); wheel.current += -e.deltaY * 0.004; glide.current = null; };
     window.addEventListener("keydown", down);
     window.addEventListener("keyup", up);
     window.addEventListener("blur", blur);
-    el.addEventListener("pointermove", pm);
-    el.addEventListener("pointerleave", leave);
+    el.addEventListener("pointerdown", pd);
+    window.addEventListener("pointermove", pm);
+    window.addEventListener("pointerup", pu);
     el.addEventListener("wheel", wh, { passive: false });
     return () => {
       window.removeEventListener("keydown", down); window.removeEventListener("keyup", up); window.removeEventListener("blur", blur);
-      el.removeEventListener("pointermove", pm); el.removeEventListener("pointerleave", leave); el.removeEventListener("wheel", wh);
+      el.removeEventListener("pointerdown", pd); window.removeEventListener("pointermove", pm); window.removeEventListener("pointerup", pu); el.removeEventListener("wheel", wh);
     };
   }, [gl]);
 
@@ -98,7 +105,7 @@ export default function Player({ focusZone }: { focusZone: Zone | "overview" }) 
     } else {
       if (k.has("arrowleft") || k.has("q")) b.yaw += 1.4 * dt;
       if (k.has("arrowright") || k.has("e")) b.yaw -= 1.4 * dt;
-      b.yaw = THREE.MathUtils.clamp(b.yaw, -BASE_YAW_LIMIT, BASE_YAW_LIMIT);
+      b.yaw = THREE.MathUtils.clamp(b.yaw, -YAW_LIMIT, YAW_LIMIT);
       // walk where you're looking (horizontal)
       const yaw = look.current.yaw;
       fwd.set(-Math.sin(yaw), 0, -Math.cos(yaw));
@@ -129,12 +136,9 @@ export default function Player({ focusZone }: { focusZone: Zone | "overview" }) 
       p.y = THREE.MathUtils.clamp(p.y, BOUNDS.minY, BOUNDS.maxY);
     }
 
-    // mouse look: offset from base heading, eased; drifts back to center when the mouse leaves
-    const mx = mouse.current.inside ? mouse.current.x : 0, my = mouse.current.inside ? mouse.current.y : 0;
-    const dz = (v: number) => Math.sign(v) * Math.max(0, Math.abs(v) - 0.08) / 0.92; // small dead zone
-    const targetYaw = THREE.MathUtils.clamp(b.yaw - dz(mx) * MOUSE_YAW, -YAW_LIMIT, YAW_LIMIT);
-    const targetPitch = THREE.MathUtils.clamp(b.pitch - dz(my) * MOUSE_PITCH, PITCH_MIN, PITCH_MAX);
-    const kLook = glide.current ? 10 : mouse.current.inside ? 4.5 : 1.5;
+    // eased look toward the dragged heading
+    const targetYaw = b.yaw, targetPitch = b.pitch;
+    const kLook = glide.current ? 10 : 14;
     look.current.yaw += (targetYaw - look.current.yaw) * damp(kLook, dt);
     look.current.pitch += (targetPitch - look.current.pitch) * damp(kLook, dt);
 
