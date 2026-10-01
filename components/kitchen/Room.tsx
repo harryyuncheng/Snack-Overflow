@@ -2,11 +2,12 @@
 import { RoundedBox } from "@react-three/drei";
 import LabelSprite from "./LabelSprite";
 import { useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { Suspense, useMemo, useRef } from "react";
+import { Model, MODEL } from "./models";
 import * as THREE from "three";
 import type { Zone } from "@/lib/types";
 import { ZONES, ISLAND, BOWL } from "./zones";
-import { corkTexture, subwayTileTexture, windowSkyTexture, woodFloorTexture } from "./textures";
+import { corkTexture, rampBannerTexture, snackSignTexture, subwayTileTexture, windowSkyTexture, woodFloorTexture } from "./textures";
 
 const WALL = "#ece5da";
 
@@ -58,40 +59,20 @@ function Fridge({ zone, open, onToggle, body }: { zone: Zone; open: boolean; onT
   );
 }
 
-function Plant({ pos, scale = 1 }: { pos: [number, number, number]; scale?: number }) {
-  const leaves = useMemo(() => Array.from({ length: 9 }, (_, i) => {
-    const a = (i / 9) * Math.PI * 2 + i * 0.7;
-    return { p: [Math.cos(a) * 0.16, 0.55 + (i % 3) * 0.14, Math.sin(a) * 0.16] as [number, number, number], s: 0.13 + (i % 4) * 0.03 };
-  }), []);
-  return (
-    <group position={pos} scale={scale}>
-      <mesh position={[0, 0.2, 0]} castShadow><cylinderGeometry args={[0.17, 0.13, 0.4, 20]} /><meshStandardMaterial color="#d9d2c6" roughness={0.9} /></mesh>
-      <mesh position={[0, 0.39, 0]}><cylinderGeometry args={[0.155, 0.155, 0.02, 20]} /><meshStandardMaterial color="#3e2b1e" /></mesh>
-      {leaves.map((l, i) => (
-        <mesh key={i} position={l.p} scale={[1, 1.4, 1]} castShadow><sphereGeometry args={[l.s, 10, 8]} /><meshStandardMaterial color={i % 2 ? "#3f7d3a" : "#2f6a33"} roughness={0.8} /></mesh>
-      ))}
-    </group>
-  );
+const PLANTS = [MODEL.plant1, MODEL.plant2, MODEL.plant4];
+function Plant({ pos, scale = 1, kind = 0 }: { pos: [number, number, number]; scale?: number; kind?: number }) {
+  return <Model url={PLANTS[kind % 3]} height={0.95 * scale} position={pos} rotation={kind * 1.3} shadow={false} />;
 }
 
 function Stool({ pos }: { pos: [number, number, number] }) {
-  return (
-    <group position={pos}>
-      <mesh position={[0, 0.72, 0]} castShadow><cylinderGeometry args={[0.2, 0.2, 0.06, 24]} /><meshStandardMaterial color="#2b2b2b" roughness={0.6} /></mesh>
-      <mesh position={[0, 0.36, 0]}><cylinderGeometry args={[0.025, 0.025, 0.72, 8]} /><meshStandardMaterial color="#9a9a9a" metalness={0.8} roughness={0.3} /></mesh>
-      <mesh position={[0, 0.25, 0]} rotation={[Math.PI / 2, 0, 0]}><torusGeometry args={[0.15, 0.012, 6, 24]} /><meshStandardMaterial color="#9a9a9a" metalness={0.8} /></mesh>
-      <mesh position={[0, 0.01, 0]}><cylinderGeometry args={[0.18, 0.2, 0.02, 20]} /><meshStandardMaterial color="#555" metalness={0.6} /></mesh>
-    </group>
-  );
+  return <Model url={MODEL.stool} height={0.8} position={pos} rotation={pos[0] * 0.7} />;
 }
 
 function Pendant({ x, z }: { x: number; z: number }) {
   return (
-    <group position={[x, 0, z]}>
-      <mesh position={[0, 3.0, 0]}><cylinderGeometry args={[0.005, 0.005, 0.8, 4]} /><meshStandardMaterial color="#222" /></mesh>
-      <mesh position={[0, 2.52, 0]}><coneGeometry args={[0.22, 0.24, 24, 1, true]} /><meshStandardMaterial color="#1f1f1f" side={THREE.DoubleSide} roughness={0.5} /></mesh>
-      <mesh position={[0, 2.44, 0]}><sphereGeometry args={[0.06, 12, 8]} /><meshStandardMaterial color="#fff3d6" emissive="#ffd9a0" emissiveIntensity={2} /></mesh>
-      <pointLight position={[0, 2.35, 0]} intensity={2.5} distance={4.5} decay={1.6} color="#ffd9a6" />
+    <group>
+      <Model url={MODEL.lamp} height={0.7} position={[x, 3.5 - 0.7, z]} shadow={false} />
+      <pointLight position={[x, 2.7, z]} intensity={2.2} distance={4.5} decay={1.6} color="#ffd9a6" />
     </group>
   );
 }
@@ -120,10 +101,13 @@ export default function Room({ doors, toggleDoor }: { doors: Record<string, bool
   const tile = useMemo(() => { const t = subwayTileTexture(); t.repeat.set(5, 1.2); return t; }, []);
   const sky = useMemo(() => windowSkyTexture(), []);
   const cork = useMemo(() => corkTexture(), []);
-  const P = ZONES.pantry, C = ZONES.coffee_bar, F = ZONES.freezer;
+  const ramp = useMemo(() => rampBannerTexture(), []);
+  const sign = useMemo(() => snackSignTexture(), []);
+  const P = ZONES.pantry, C = ZONES.coffee_bar;
   const wood = <meshStandardMaterial color="#a8774a" roughness={0.75} />;
   const counterX0 = 2.95, counterX1 = 7.0, counterW = counterX1 - counterX0, counterCx = (counterX0 + counterX1) / 2;
   return (
+    <Suspense fallback={null}>
     <group>
       {/* floor, walls, ceiling */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[1, 0, 4]} receiveShadow><planeGeometry args={[18, 12]} /><meshStandardMaterial map={floor} roughness={0.55} /></mesh>
@@ -150,6 +134,9 @@ export default function Room({ doors, toggleDoor }: { doors: Record<string, bool
       {[0, P.width / 2, P.width].map((dx) => <mesh key={dx} position={[P.origin[0] + dx, 1.31, P.origin[2] + P.depth / 2]} castShadow><boxGeometry args={[0.04, 2.62, P.depth + 0.02]} />{wood}</mesh>)}
       <ZoneLabel text={P.label} pos={[P.origin[0] + P.width / 2, 2.85, P.origin[2] + 0.3]} />
 
+      {/* Ramp banner above the pantry + Snack Overflow sign above the fridges */}
+      <mesh position={[P.origin[0] + P.width / 2, 3.08, -1.735]}><planeGeometry args={[3.6, 0.6]} /><meshBasicMaterial map={ramp} toneMapped={false} /></mesh>
+      <mesh position={[-3.9, 3.17, -1.735]}><planeGeometry args={[2.6, 0.49]} /><meshBasicMaterial map={sign} toneMapped={false} /></mesh>
       {/* corkboard between fresh fridge and pantry */}
       <mesh position={[2.62, 1.75, -1.73]}><planeGeometry args={[0.5, 0.8]} /><meshStandardMaterial map={cork} roughness={1} /></mesh>
 
@@ -197,27 +184,13 @@ export default function Room({ doors, toggleDoor }: { doors: Record<string, bool
       ))}
       <ZoneLabel text={C.label} pos={[C.origin[0] + 0.75, 2.95, C.origin[2] + 0.3]} />
 
-      {/* chest freezer */}
-      <group>
-        <mesh position={[F.origin[0] + F.width / 2, 0.06, F.origin[2] + F.depth / 2]}><boxGeometry args={[F.width + 0.2, 0.12, F.depth + 0.2]} /><meshStandardMaterial color="#f7f7f7" /></mesh>
-        {[-1, 1].map((s) => <mesh key={`x${s}`} position={[F.origin[0] + F.width / 2 + (s * (F.width + 0.16)) / 2, 0.45, F.origin[2] + F.depth / 2]} castShadow><boxGeometry args={[0.04, 0.9, F.depth + 0.2]} /><meshStandardMaterial color="#f7f7f7" roughness={0.4} /></mesh>)}
-        {[-1, 1].map((s) => <mesh key={`z${s}`} position={[F.origin[0] + F.width / 2, 0.45, F.origin[2] + F.depth / 2 + (s * (F.depth + 0.16)) / 2]} castShadow><boxGeometry args={[F.width + 0.2, 0.9, 0.04]} /><meshStandardMaterial color="#f7f7f7" roughness={0.4} /></mesh>)}
-        <mesh position={[F.origin[0] + F.width / 2, 0.4, F.origin[2] + F.depth / 2]}><boxGeometry args={[F.width, 0.02, F.depth]} /><meshStandardMaterial color="#dbe9f2" /></mesh>
-        <mesh position={[F.origin[0] + F.width / 2, 0.905, F.origin[2] + F.depth / 2]}><boxGeometry args={[F.width + 0.16, 0.012, F.depth + 0.16]} /><meshStandardMaterial color="#e3f2fd" transparent opacity={0.16} depthWrite={false} /></mesh>
-        
-        <ZoneLabel text={F.label} pos={[F.origin[0] + F.width / 2, 1.25, F.origin[2] + 0.3]} />
-      </group>
-      {/* corkboard above freezer */}
-      <mesh position={[F.origin[0] + F.width / 2, 1.95, -1.73]}><planeGeometry args={[1.25, 0.78]} /><meshStandardMaterial map={cork} roughness={1} /></mesh>
-      <mesh position={[F.origin[0] + F.width / 2, 1.95, -1.745]}><planeGeometry args={[1.33, 0.86]} /><meshStandardMaterial color="#8a6a45" /></mesh>
+      {/* upright glass-door freezer: reads at eye level */}
+      <Fridge zone="freezer" open={doors.freezer ?? false} onToggle={() => toggleDoor("freezer")} body="#eef0f2" />
 
       {/* island with fruit bowl + stools */}
       <mesh position={[ISLAND.x, ISLAND.h / 2 - 0.02, ISLAND.z]} castShadow receiveShadow><boxGeometry args={[ISLAND.w - 0.1, ISLAND.h - 0.04, ISLAND.d - 0.1]} /><meshStandardMaterial color="#e9e4dc" roughness={0.7} /></mesh>
       <mesh position={[ISLAND.x, ISLAND.h, ISLAND.z]} castShadow receiveShadow><boxGeometry args={[ISLAND.w + 0.1, 0.05, ISLAND.d + 0.15]} /><meshStandardMaterial color="#8e6a48" roughness={0.45} /></mesh>
-      <mesh position={[BOWL.x, BOWL.y + 0.02, BOWL.z]} rotation={[Math.PI, 0, 0]} castShadow receiveShadow>
-        <sphereGeometry args={[BOWL.r + 0.06, 40, 16, 0, Math.PI * 2, 0, Math.PI / 2.4]} />
-        <meshStandardMaterial color="#d9d3c7" roughness={0.5} side={THREE.DoubleSide} />
-      </mesh>
+      <Model url={MODEL.bowl} width={BOWL.r * 2 + 0.1} position={[BOWL.x, ISLAND.h + 0.025, BOWL.z]} />
       {/* napkins + a laptop someone left */}
       <mesh position={[1.55, ISLAND.h + 0.04, 3.45]} rotation={[0, 0.3, 0]} castShadow><boxGeometry args={[0.2, 0.05, 0.2]} /><meshStandardMaterial color="#ffffff" /></mesh>
       <group position={[-0.35, ISLAND.h + 0.03, 3.75]} rotation={[0, -0.4, 0]}>
@@ -229,24 +202,22 @@ export default function Room({ doors, toggleDoor }: { doors: Record<string, bool
       <Pendant x={1.3} z={ISLAND.z} />
       <ZoneLabel text={ZONES.fruit_bowl.label} pos={[BOWL.x, 1.55, BOWL.z]} />
 
-      <Plant pos={[-7.1, 0, -1.2]} scale={1.6} />
-      <Plant pos={[2.62, 0, -1.4]} scale={1.1} />
-      <Plant pos={[9.1, 0, -1.2]} scale={1.5} />
-      <Plant pos={[6.6, 0.935, -1.48]} scale={0.45} />
+      <Plant pos={[-7.05, 0, -1.2]} scale={1.6} kind={0} />
+      <Plant pos={[2.62, 0, -1.35]} scale={1.05} kind={1} />
+      <Plant pos={[9.15, 0, -1.2]} scale={1.5} kind={2} />
+      <Plant pos={[6.62, 0.935, -1.5]} scale={0.38} kind={2} />
       {/* office space around the kitchen */}
       <Desk pos={[-5.6, 0, 6.2]} rot={0.04} />
       <Desk pos={[-3.9, 0, 6.15]} rot={-0.03} />
       <Desk pos={[-5.6, 0, 8.3]} rot={Math.PI} />
-      <group position={[7.6, 0, 6.6]} rotation={[0, -Math.PI / 2, 0]}>
-        <mesh position={[0, 0.22, 0]} castShadow><boxGeometry args={[2.0, 0.44, 0.85]} /><meshStandardMaterial color="#4c5a66" roughness={0.9} /></mesh>
-        <mesh position={[0, 0.6, -0.35]} castShadow><boxGeometry args={[2.0, 0.55, 0.18]} /><meshStandardMaterial color="#4c5a66" roughness={0.9} /></mesh>
-        {[-0.5, 0.5].map((x) => <mesh key={x} position={[x, 0.5, 0.0]}><boxGeometry args={[0.9, 0.14, 0.7]} /><meshStandardMaterial color="#56656f" roughness={0.95} /></mesh>)}
-        <mesh position={[0, 0.25, 1.0]} castShadow><cylinderGeometry args={[0.38, 0.38, 0.04, 28]} /><meshStandardMaterial color="#a8774a" /></mesh>
-        <mesh position={[0, 0.12, 1.0]}><cylinderGeometry args={[0.04, 0.04, 0.24, 8]} /><meshStandardMaterial color="#333" /></mesh>
-      </group>
-      <Plant pos={[9.0, 0, 8.6]} scale={1.3} />
+      {/* lounge corner */}
+      <Model url={MODEL.sofa} width={2.1} position={[8.75, 0, 6.6]} rotation={-Math.PI / 2} shadow={false} />
+      <mesh position={[7.6, 0.25, 6.6]} castShadow><cylinderGeometry args={[0.38, 0.38, 0.04, 28]} /><meshStandardMaterial color="#a8774a" /></mesh>
+      <mesh position={[7.6, 0.12, 6.6]}><cylinderGeometry args={[0.04, 0.04, 0.24, 8]} /><meshStandardMaterial color="#333" /></mesh>
+      <Plant pos={[9.05, 0, 8.7]} scale={1.3} kind={0} />
       <mesh position={[-7.58, 1.7, 7]} rotation={[0, Math.PI / 2, 0]}><planeGeometry args={[2.4, 1.2]} /><meshStandardMaterial color="#f8f8f6" /></mesh>
       <mesh position={[-7.57, 1.7, 7]} rotation={[0, Math.PI / 2, 0]}><planeGeometry args={[2.3, 1.1]} /><meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.15} /></mesh>
     </group>
+    </Suspense>
   );
 }

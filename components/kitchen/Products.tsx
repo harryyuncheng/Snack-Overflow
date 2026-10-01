@@ -1,7 +1,8 @@
 "use client";
 import LabelSprite from "./LabelSprite";
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
-import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import { Suspense, useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import { MODEL, photoFront, useBakedGeometry } from "./models";
 import * as THREE from "three";
 import type { Product } from "@/lib/types";
 import type { Location } from "@/lib/layout";
@@ -11,8 +12,32 @@ import { labelTexture, loadPhoto, rand, shelfTagTexture } from "./textures";
 
 export type Shape = Product["model3d"]["shape"];
 export const SIZE: Record<Shape, [number, number, number]> = {
-  can: [0.12, 0.2, 0.12], bottle: [0.12, 0.3, 0.12], bag: [0.2, 0.27, 0.07], box: [0.19, 0.24, 0.08], bar: [0.17, 0.045, 0.07], fruit: [0.13, 0.13, 0.13], cup: [0.13, 0.1, 0.13],
+  can: [0.12, 0.2, 0.12], bottle: [0.12, 0.3, 0.12], bag: [0.2, 0.28, 0.08], box: [0.19, 0.24, 0.08], bar: [0.17, 0.075, 0.032], fruit: [0.13, 0.13, 0.13], cup: [0.12, 0.1, 0.12],
 };
+/** Per-product overrides where the generic shape size reads wrong. */
+const SIZE_BY_ID: Record<string, [number, number, number]> = {
+  babybel: [0.075, 0.042, 0.075], bananas: [0.34, 0.2, 0.34], apples: [0.11, 0.11, 0.11], clementines: [0.085, 0.075, 0.085],
+};
+export const sizeFor = (p: Product): [number, number, number] => SIZE_BY_ID[p.id] ?? SIZE[p.model3d.shape];
+const MODEL_FRUIT: Record<string, string> = { bananas: MODEL.bananas, apples: MODEL.apple, clementines: MODEL.lime };
+/** bananas come in bunches of ~5 */
+const PER_UNIT: Record<string, number> = { bananas: 5 };
+
+/** Resize a centered geometry to exact w/h/d. */
+function fit(g: THREE.BufferGeometry, [w, h, d]: [number, number, number]) {
+  g.computeBoundingBox();
+  const s = g.boundingBox!.getSize(new THREE.Vector3());
+  g.scale(w / s.x, h / s.y, d / s.z);
+  return g;
+}
+
+/** Mini wax cheese wheel: a puck with rounded edges. */
+function babybelGeometry([w, h]: [number, number, number]) {
+  const r = w / 2, e = h * 0.45, pts: THREE.Vector2[] = [new THREE.Vector2(0, -h / 2)];
+  for (let i = 0; i <= 6; i++) { const a = -Math.PI / 2 + (i / 6) * Math.PI; pts.push(new THREE.Vector2(r - e + Math.cos(a) * e, Math.sin(a) * (h / 2))); }
+  pts.push(new THREE.Vector2(0, h / 2));
+  return new THREE.LatheGeometry(pts, 28);
+}
 const MAX_UNITS = 16;
 const HIGHLIGHT = new THREE.Color("#e4f222");
 
@@ -22,12 +47,8 @@ export type Visual = {
 };
 
 function geometryFor(p: Product): THREE.BufferGeometry {
-  const [w, h, d] = SIZE[p.model3d.shape];
-  if (p.id === "bananas") {
-    const g = new THREE.TorusGeometry(0.11, 0.024, 8, 16, Math.PI * 0.75);
-    g.rotateZ(Math.PI * 0.12); g.scale(1, 1, 1.25);
-    return g;
-  }
+  const [w, h, d] = sizeFor(p);
+  if (p.id === "babybel") return babybelGeometry([w, h, d]);
   switch (p.model3d.shape) {
     case "can": return new THREE.CylinderGeometry(w / 2, w / 2 * 0.96, h, 24);
     case "cup": return new THREE.CylinderGeometry(w / 2, w / 2.5, h, 24);
@@ -61,7 +82,7 @@ type Unit = { pos: [number, number, number]; rot: [number, number, number] };
 
 /** Deterministic, slightly messy arrangement. Units are ordered back→front, bottom→top so taking stock removes front/top items first. */
 function unitLayout(p: Product, loc: Location): Unit[] {
-  const [w, h, d] = SIZE[p.model3d.shape];
+  const [w, h, d] = sizeFor(p);
   const r = (i: number, k: number) => rand(p.id, i, k);
   if (loc.zone === "fruit_bowl") {
     const out: Unit[] = [];
@@ -70,19 +91,21 @@ function unitLayout(p: Product, loc: Location): Unit[] {
       const layer = Math.floor(i / 7);
       const a = a0 + (r(i, 0) - 0.5) * 1.9;
       const rad = (0.08 + r(i, 1) * 0.26) * (1 - layer * 0.35);
-      out.push({ pos: [BOWL.x + Math.cos(a) * rad, BOWL.y - 0.1 + w / 2 + layer * 0.08 + (0.3 - rad) * 0.25, BOWL.z + Math.sin(a) * rad], rot: [r(i, 2) * 3, r(i, 3) * 6, r(i, 4) * 3] });
+      out.push({ pos: [BOWL.x + Math.cos(a) * rad, BOWL.y + 0.07 + w / 2 + layer * 0.08 + (0.3 - rad) * 0.25, BOWL.z + Math.sin(a) * rad], rot: p.id === "bananas" ? [(r(i, 2) - 0.5) * 0.4, r(i, 3) * 6, (r(i, 4) - 0.5) * 0.4] : [r(i, 2) * 3, r(i, 3) * 6, r(i, 4) * 3] });
     }
     return out.sort((a, b) => a.pos[1] - b.pos[1]);
   }
   const z = ZONES[loc.zone];
   const slots = SLOTS_PER_SHELF[loc.zone];
   const slotW = z.width / slots;
-  const y0 = z.shelfY[Math.min(loc.shelf, z.shelfY.length - 1)];
+  // freezer stock sits on the eye-level shelf
+  const shelf = loc.zone === "freezer" ? loc.shelf + 1 : loc.shelf;
+  const y0 = z.shelfY[Math.min(shelf, z.shelfY.length - 1)];
   const usable = slotW - 0.08;
-  const lying = p.model3d.shape === "bar";
+  const lying = p.id === "babybel";
   const cols = Math.max(1, Math.floor(usable / (w + 0.018)));
   const rows = Math.max(1, Math.floor((z.depth - 0.04) / (d + 0.03)));
-  const layers = lying ? 4 : h < 0.21 ? 2 : 1;
+  const layers = lying ? 3 : h < 0.21 ? 2 : 1;
   const gap = (usable - cols * w) / Math.max(1, cols);
   const out: Unit[] = [];
   for (let layer = 0; layer < layers; layer++)
@@ -113,10 +136,10 @@ function unitLayout(p: Product, loc: Location): Unit[] {
 }
 
 function tagPosition(loc: Location): [number, number, number] | null {
-  if (loc.zone === "fruit_bowl" || loc.zone === "freezer") return null;
+  if (loc.zone === "fruit_bowl") return null;
   const z = ZONES[loc.zone];
   const slotW = z.width / SLOTS_PER_SHELF[loc.zone];
-  const y = z.shelfY[Math.min(loc.shelf, z.shelfY.length - 1)];
+  const y = z.shelfY[Math.min(loc.zone === "freezer" ? loc.shelf + 1 : loc.shelf, z.shelfY.length - 1)];
   return [z.origin[0] + loc.slot * slotW + slotW / 2, y - 0.045, z.origin[2] + z.depth + 0.015];
 }
 
@@ -124,31 +147,61 @@ const tmp = new THREE.Object3D();
 const heatCold = new THREE.Color("#8fa9c4"), heatMid = new THREE.Color("#e4f222"), heatHot = new THREE.Color("#ff4d1a");
 const scratch = new THREE.Color();
 
-export function ProductUnits({ p, loc, stock, price, visual, onHover, onSelect }: {
+type Props = {
   p: Product; loc: Location; stock: number; price: string; visual: Visual;
   onHover: (id: string | null, pos?: THREE.Vector3) => void; onSelect: (id: string) => void;
-}) {
+};
+
+export function ProductUnits(props: Props) {
+  return <Suspense fallback={null}><ProductUnitsInner {...props} /></Suspense>;
+}
+
+function ProductUnitsInner({ p, loc, stock, price, visual, onHover, onSelect }: Props) {
   const mesh = useRef<THREE.InstancedMesh>(null);
   const units = useMemo(() => unitLayout(p, loc), [p, loc]);
-  const geom = useMemo(() => geometryFor(p), [p]);
   const shape = p.model3d.shape;
+  // CC0 model geometry: Kenney chip bag + candy wrapper, Poly Haven fruit
+  const bagModel = useBakedGeometry(MODEL.bag, 1);
+  const barModel = useBakedGeometry(MODEL.bar, 1);
+  const fruitModel = useBakedGeometry(MODEL_FRUIT[p.id] ?? MODEL.apple, Math.max(...sizeFor(p)));
+  const modelFruit = !!MODEL_FRUIT[p.id];
+  const photoFace = shape === "bag" || shape === "bar";
+  const geom = useMemo(() => {
+    if (modelFruit) return fruitModel.geom;
+    if (shape === "bag") { const g = bagModel.geom.clone(); g.rotateY(Math.PI / 2); return photoFront(fit(g, sizeFor(p))); }
+    if (shape === "bar") { const g = barModel.geom.clone(); g.rotateX(Math.PI / 2); return photoFront(fit(g, sizeFor(p))); }
+    return geometryFor(p);
+  }, [p, shape, modelFruit, fruitModel, bagModel, barModel]);
   const isFruit = shape === "fruit";
   const mats = useMemo(() => {
-    const label = new THREE.MeshStandardMaterial({ map: isFruit ? null : labelTexture(p), color: isFruit ? p.model3d.color : "#ffffff", roughness: shape === "can" ? 0.32 : isFruit ? 0.55 : 0.6, metalness: shape === "can" ? 0.35 : 0, transparent: true });
-    if (shape === "bag" || shape === "box" || shape === "bar") {
-      const side = new THREE.MeshStandardMaterial({ color: p.model3d.color, roughness: shape === "bag" ? 0.45 : 0.7, metalness: shape === "bag" ? 0.15 : 0, transparent: true });
-      return { list: [side, side, side, side, label, side], label, all: [label, side] };
+    if (modelFruit) {
+      const m = (p.id === "clementines"
+        ? new THREE.MeshStandardMaterial({ color: "#ff8a1c", roughness: 0.55 })
+        : (fruitModel.material.clone() as THREE.MeshStandardMaterial));
+      m.transparent = true;
+      return { list: [m], label: m, all: [m], base: new Map([[m, m.color.clone()]]) };
+    }
+    const label = new THREE.MeshStandardMaterial({ map: isFruit ? null : labelTexture(p), color: isFruit ? p.model3d.color : "#ffffff", roughness: shape === "can" ? 0.32 : isFruit ? 0.4 : 0.6, metalness: shape === "can" ? 0.35 : 0, transparent: true });
+    const withBase = <T extends { all: THREE.MeshStandardMaterial[] }>(o: T) => ({ ...o, base: new Map(o.all.map((m) => [m, m.color.clone()])) });
+    if (photoFace) {
+      const side = new THREE.MeshStandardMaterial({ color: p.model3d.color, roughness: shape === "bag" ? 0.38 : 0.55, metalness: shape === "bag" ? 0.25 : 0.1, transparent: true });
+      return withBase({ list: [label, side], label, all: [label, side] });
+    }
+    if (shape === "box") {
+      const side = new THREE.MeshStandardMaterial({ color: p.model3d.color, roughness: 0.7, metalness: 0, transparent: true });
+      return withBase({ list: [side, side, side, side, label, side], label, all: [label, side] });
     }
     if (shape === "can" || shape === "cup") {
-      const cap = new THREE.MeshStandardMaterial({ color: shape === "can" ? "#c8ccd0" : "#f4f2f0", metalness: shape === "can" ? 0.9 : 0, roughness: 0.3, transparent: true });
-      return { list: [label, cap, cap], label, all: [label, cap] };
+      // cups: foil lid shows the photo; cans: brushed aluminium ends
+      const cap = new THREE.MeshStandardMaterial({ color: shape === "can" ? "#c8ccd0" : "#e9e6df", metalness: shape === "can" ? 0.9 : 0.6, roughness: 0.3, transparent: true });
+      return withBase({ list: shape === "cup" ? [label, label, cap] : [label, cap, cap], label, all: [label, cap] });
     }
-    return { list: [label], label, all: [label] };
-  }, [p, shape, isFruit]);
+    return withBase({ list: [label], label, all: [label] });
+  }, [p, shape, isFruit, modelFruit, photoFace, fruitModel]);
 
   // swap in the real product photo when it arrives
   useEffect(() => {
-    if (isFruit) return;
+    if (isFruit || modelFruit) return;
     loadPhoto(p, (t) => {
       let tex = t;
       if (shape === "can" || shape === "cup" || shape === "bottle") {
@@ -158,7 +211,7 @@ export function ProductUnits({ p, loc, stock, price, visual, onHover, onSelect }
       }
       mats.label.map = tex; mats.label.needsUpdate = true;
     });
-  }, [p, mats, shape, isFruit]);
+  }, [p, mats, shape, isFruit, modelFruit]);
 
   // matrices for every possible unit once; stock only changes the draw count (cheap while scrubbing)
   useLayoutEffect(() => {
@@ -169,7 +222,7 @@ export function ProductUnits({ p, loc, stock, price, visual, onHover, onSelect }
     m.instanceMatrix.needsUpdate = true;
     m.computeBoundingSphere();
   }, [units]);
-  const visible = Math.min(units.length, Math.max(0, Math.round(stock)));
+  const visible = Math.min(units.length, Math.max(0, Math.ceil(stock / (PER_UNIT[p.id] ?? 1))));
   useLayoutEffect(() => { if (mesh.current) mesh.current.count = visible; }, [visible]);
 
   const v = useRef(visual);
@@ -179,7 +232,7 @@ export function ProductUnits({ p, loc, stock, price, visual, onHover, onSelect }
     const pulse = 0.5 + 0.5 * Math.sin(clock.elapsedTime * 4);
     for (const m of mats.all) {
       m.emissive.setRGB(0, 0, 0); m.emissiveIntensity = 1; m.opacity = 1;
-      if (m === mats.label) m.color.set(isFruit ? p.model3d.color : "#ffffff");
+      m.color.copy(mats.base.get(m)!);
     }
     const tint = (c: THREE.Color) => { for (const m of mats.all) { m.color.lerp(c, 0.65); m.emissive.copy(c).multiplyScalar(0.18); } };
     if (s.overlay === "heatmap") {

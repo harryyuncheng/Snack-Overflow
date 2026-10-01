@@ -148,3 +148,33 @@ export function corkTexture() {
   t.colorSpace = THREE.SRGBColorSpace;
   return t;
 }
+
+/** Ramp-branded wall banner: highlighter field, near-black wordmark. */
+export function rampBannerTexture() {
+  const c = document.createElement("canvas");
+  c.width = 1536; c.height = 256;
+  const g = c.getContext("2d")!;
+  g.fillStyle = "#e4f222"; g.fillRect(0, 0, c.width, c.height);
+  g.fillStyle = "#0c0a08";
+  g.font = "600 150px Inter, Helvetica, Arial, sans-serif"; g.textBaseline = "middle";
+  g.fillText("ramp", 70, 120);
+  // small angled mark next to the wordmark
+  g.beginPath(); g.moveTo(420, 175); g.lineTo(480, 60); g.lineTo(505, 60); g.lineTo(445, 175); g.closePath(); g.fill();
+  g.font = "400 46px Inter, Helvetica, Arial, sans-serif";
+  g.fillText("Office Snacks fund", 620, 100);
+  g.fillStyle = "#3a3a2a"; g.font = "400 34px Inter, Helvetica, Arial, sans-serif";
+  g.fillText("Every snack paid on Ramp · receipts auto-attached", 620, 160);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+}
+
+/** Dark "Snack Overflow" sign with a highlighter accent. */
+export function snackSignTexture() {
+  const c = document.createElement("canvas");
+  c.width = 1024; c.height = 192;
+  const g = c.getContext("2d")!;
+  g.fillStyle = "#1a1919"; g.fillRect(0, 0, c.width, c.height);
+  g.fillStyle = "#e4f222"; g.beginPath(); g.roundRect(48, 52, 88, 88, 14); g.fill();
+  g.fillStyle = "#0c0a08"; g.font = "600 64px Inter, Helvetica, Arial, sans-serif"; g.textBaseline = "middle"; g.textAlign = "center"; g.fillText("S", 92, 100);
+  g.textAlign = "left"; g.fillStyle = "#ffffff"; g.font = "400 76px Inter, Helvetica, Arial, sans-serif"; g.fillText("Snack Overflow", 170, 100);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+}

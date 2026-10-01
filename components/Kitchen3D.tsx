@@ -1,6 +1,7 @@
 "use client";
 import { Canvas } from "@react-three/fiber";
-import { useState } from "react";
+import { memo, useCallback, useRef, useState } from "react";
+import { PerformanceMonitor } from "@react-three/drei";
 import * as THREE from "three";
 import type { Product, Zone } from "@/lib/types";
 import type { Location } from "@/lib/layout";
@@ -30,33 +31,27 @@ const micro: React.CSSProperties = { fontSize: 10, letterSpacing: "0.018em", tex
 
 const NONE: ItemStatus = { lowStock: false, nearExpiry: false, eatFirst: false, heat: 0, netRating: 0, daysToExpiry: null, perDay: 0 };
 
-export default function Kitchen3D({ products, layout, stock, status, overlay, dietary, highlights, selected, onSelect, focusZone }: KitchenProps) {
-  const [hover, setHover] = useState<{ id: string; pos: THREE.Vector3 } | null>(null);
-  const [mouse, setMouse] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [doors, setDoors] = useState<Record<string, boolean>>({ drink_fridge: false, fresh_fridge: false });
-  const hp = hover && products.find((p) => p.id === hover.id);
-  const hs = hover ? status[hover.id] ?? NONE : null;
-  // tooltip is plain DOM next to the canvas (drei <Html> roots warn on unmount under React 19)
+type Hover = { id: string; pos: THREE.Vector3 } | null;
+type SceneProps = Omit<KitchenProps, "focusZone"> & { onHover: (h: Hover) => void };
+
+/** Everything inside the Canvas; memoized so hover/tooltip changes never re-render the 3D tree. */
+const Scene = memo(function Scene({ products, layout, stock, status, overlay, dietary, highlights, selected, onSelect, onHover }: SceneProps) {
+  const [doors, setDoors] = useState<Record<string, boolean>>({ drink_fridge: false, fresh_fridge: false, freezer: false });
+  const toggleDoor = useCallback((z: Zone) => setDoors((d) => ({ ...d, [z]: !d[z] })), []);
+  const hoverCb = useCallback((id: string | null, pos?: THREE.Vector3) => onHover(id && pos ? { id, pos } : null), [onHover]);
   return (
-    <div className="relative h-full w-full" onPointerMove={(e) => { const r = e.currentTarget.getBoundingClientRect(); setMouse({ x: e.clientX - r.left, y: e.clientY - r.top }); }}>
-    <Canvas
-      shadows
-      dpr={[1, 1.5]}
-      camera={{ position: STATIONS.overview.pos, fov: 55, near: 0.05, far: 60 }}
-      gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.05 }}
-      onPointerMissed={() => setHover(null)}
-    >
+    <>
       <color attach="background" args={["#f4f2f0"]} />
       <fog attach="fog" args={["#efe9e0", 14, 30]} />
       <hemisphereLight args={["#fff6e8", "#8a7560", 0.95]} />
-      <ambientLight intensity={0.18} />
+      <ambientLight intensity={0.2} />
       <directionalLight
         position={[6, 9, 7]} intensity={1.5} color="#fff1dc" castShadow
         shadow-mapSize={[1024, 1024]} shadow-bias={-0.0004}
         shadow-camera-left={-11} shadow-camera-right={11} shadow-camera-top={9} shadow-camera-bottom={-9} shadow-camera-near={1} shadow-camera-far={30}
       />
       <directionalLight position={[5.8, 2.6, -4]} intensity={0.5} color="#dcecff" />
-      <Room doors={doors} toggleDoor={(z) => setDoors((d) => ({ ...d, [z]: !d[z] }))} />
+      <Room doors={doors} toggleDoor={toggleDoor} />
       {products.map((p) => {
         const loc = layout[p.id];
         if (!loc) return null;
@@ -71,22 +66,50 @@ export default function Kitchen3D({ products, layout, stock, status, overlay, di
               highlight: !!highlights?.has(p.id), dimmed: !!highlights && !highlights.has(p.id), selected: selected === p.id,
             }}
             onSelect={onSelect}
-            onHover={(id, pos) => setHover(id && pos ? { id, pos } : null)}
+            onHover={hoverCb}
           />
         );
       })}
-      <Player focusZone={focusZone} />
-    </Canvas>
-    {hp && hs && (
-      <div style={{ ...tipStyle, position: "absolute", left: mouse.x + 16, top: mouse.y + 16, zIndex: 20 }}>
-        <div style={{ fontSize: 14 }}>{hp.name}</div>
-        <div style={{ ...micro, marginBottom: 6 }}>{hp.brand}</div>
-        <Row k="In stock" v={`${stock[hp.id] ?? 0}${hs.lowStock ? " · low" : ""}`} />
-        <Row k="Expires" v={hs.daysToExpiry === null ? "–" : `${hs.daysToExpiry} days`} alert={hs.nearExpiry} />
-        <Row k="Rating" v={`${Math.round(hs.netRating * 100)}% net`} />
-        <Row k="Eaten" v={`${hs.perDay.toFixed(1)} / day`} />
+    </>
+  );
+});
+
+export default function Kitchen3D({ focusZone, ...scene }: KitchenProps) {
+  const [hover, setHover] = useState<Hover>(null);
+  const [dpr, setDpr] = useState(1.5);
+  const tip = useRef<HTMLDivElement>(null);
+  const hp = hover && scene.products.find((p) => p.id === hover.id);
+  const hs = hover ? scene.status[hover.id] ?? NONE : null;
+  // tooltip is plain DOM over the canvas, moved via ref so mouse moves don't re-render React
+  return (
+    <div className="relative h-full w-full" onPointerMove={(e) => {
+      const el = tip.current; if (!el) return;
+      const r = e.currentTarget.getBoundingClientRect();
+      el.style.transform = `translate(${e.clientX - r.left + 16}px, ${e.clientY - r.top + 16}px)`;
+    }}>
+      <Canvas
+        shadows
+        dpr={dpr}
+        camera={{ position: STATIONS.overview.pos, fov: 55, near: 0.05, far: 60 }}
+        gl={{ antialias: true, powerPreference: "high-performance", toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.05 }}
+        onPointerMissed={() => setHover(null)}
+      >
+        <PerformanceMonitor onDecline={() => setDpr(1)} onIncline={() => setDpr(1.5)} flipflops={3} onFallback={() => setDpr(1)} />
+        <Scene {...scene} onHover={setHover} />
+        <Player focusZone={focusZone} />
+      </Canvas>
+      <div ref={tip} style={{ ...tipStyle, position: "absolute", left: 0, top: 0, zIndex: 20, display: hp && hs ? "block" : "none", willChange: "transform" }}>
+        {hp && hs && (
+          <>
+            <div style={{ fontSize: 14 }}>{hp.name}</div>
+            <div style={{ ...micro, marginBottom: 6 }}>{hp.brand}</div>
+            <Row k="In stock" v={`${scene.stock[hp.id] ?? 0}${hs.lowStock ? " · low" : ""}`} />
+            <Row k="Expires" v={hs.daysToExpiry === null ? "–" : `${hs.daysToExpiry} days`} alert={hs.nearExpiry} />
+            <Row k="Rating" v={`${Math.round(hs.netRating * 100)}% net`} />
+            <Row k="Eaten" v={`${hs.perDay.toFixed(1)} / day`} />
+          </>
+        )}
       </div>
-    )}
     </div>
   );
 }
