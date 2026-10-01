@@ -13,16 +13,13 @@ npm test        # Vitest: savings math + supplier picker
 ```
 No keys needed: Ramp, vision and LLM all default to mock, and embeddings run locally. Copy `.env.example` to `.env.local` to enable live modes. Use **Reset demo** in the header to reseed.
 
-## Pages
+## Screens
 | Route | What |
 |---|---|
-| `/` | 3D kitchen (drink fridge, fresh fridge, pantry, coffee bar, fruit bowl, freezer). Zone fly-to, fridge doors, hover tooltips, click panel with votes + sparkline + embedding neighbors. Popularity / waste / dietary overlays. Semantic search that lights up matching items, and requests that are "fulfilled from stock". |
-| `/scan` | Webcam/upload shelf scan → detections (mock or Claude vision) → consumption events + minutes saved |
-| `/ecosystem` | Velocity × rating quadrant (stars, guilty pleasures, aspirational, duds), leaderboards, request clusters, demand by category |
-| `/orders` | Forecasting ordering agent: draft → approve → paid on the Ramp fund (mock agent card) → inventory received. Includes a Ramp policy Q&A. |
-| `/waste` | Expiring batches with "eat me first" (mock Slack nudge) and donate actions, plus waste concentration charts |
-| `/impact` | $ saved by lever, hours saved by task, waste reduction, cost/employee vs benchmark, weekly digest, methodology |
-| `/settings` | Budget, cadence, safety stock, auto-approve threshold, editable time assumptions |
+| `/` **Kitchen** | Walk through a 3D office kitchen (drink fridge, fresh fridge, pantry, coffee bar, fruit bowl, freezer) stocked with real product photos. A **timeline slider** scrubs two weeks of hourly history plus a projected week: shelves empty through the day, deliveries arrive, duds get dropped and donated, Yerba Mate gets trialed. Ask in plain language, including multi-part asks ("meat, beef jerky and protein" → Jack Link's). Vote, flag **Restock**, and see the shared kitchen feed. |
+| `/dashboard` | Savings / time / waste counters, the agent's next order → **Approve & pay with Ramp**, the Ramp fund, weekly spend & waste, savings by lever, every product (stock, velocity, liked %, supplier), request clusters, order history, methodology. |
+
+Stretch features live in [`FEATURES.md`](FEATURES.md). The kitchen uses the Ramp design system ([`DESIGN.md`](DESIGN.md)).
 
 ## How savings are calculated (`lib/savings.ts`)
 **Baseline**: a fixed weekly basket sized for full headcount × 5 days (+10% cushion), bought in whole cases from one supplier with no consumption data. These 8 weekly orders and their expiry waste are in the seed.
@@ -35,7 +32,8 @@ Savings are calculated per SKU, applying the levers in order so none of them dou
 Time saved comes from editable minute assumptions (counting, polling, ordering, receipts, reconciliation). Waste uses the logged baseline waste compared with a conservative projection.
 
 ## Architecture
-- `lib/seed.ts`: deterministic seeded generator (fixed RNG). `lib/catalog.ts`: 41 products with zones, flavors, dietary tags and 3D shapes.
+- `lib/seed.ts`: deterministic seeded generator (fixed RNG). `lib/catalog.ts`: 43 real-brand products with zones, flavors, dietary tags and 3D shapes. Photos come from Open Food Facts via `scripts/fetch-images.mjs` → `public/snacks/`.
+- `lib/timeline.ts`: hourly simulation (8:00–18:00 workdays) covering week 1 as the old fixed basket and week 2+ with Snack Overflow on, plus a projected next week. It produces the slider frames, events, current inventory, consumption, waste and orders.
 - `lib/store.ts`: in-memory repository on `globalThis`. Product and category embeddings are precomputed at boot.
 - `lib/embeddings/`: `Embedder` interface. The default `local-lite` is an offline concept-expanded hashed embedder (384-d), with hosted Voyage and OpenAI behind the same interface.
 - `lib/semantic.ts`: search (with negation like "isn't chips" and hard dietary filters), request matching, threshold clustering, substitutes.
@@ -44,4 +42,4 @@ Time saved comes from editable minute assumptions (counting, polling, ordering, 
 - `lib/vision.ts`: zod-validated detections, with mock and Claude vision modes. `lib/llm.ts`: optional Claude polish of the order rationale and the digest.
 
 ## What's mocked
-Ramp (mock fund + agent card + receipts), the vision detections (unless `VISION_MODE=live`), the Slack notification, the donation partner, and supplier catalogs/prices.
+Ramp (mock fund + agent card + receipts), the vision detections (unless `VISION_MODE=live`), notifications, the donation partner, and supplier catalogs/prices. Company and people are fictional sample data; product names and photos are real brands used for the demo.

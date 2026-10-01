@@ -1,6 +1,29 @@
 @import "tailwindcss";
-body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
-.card { @apply rounded-xl bg-white p-4 shadow-sm ring-1 ring-black/5; }
-.btn { @apply rounded-lg bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-50; }
-.btn-ghost { @apply rounded-lg px-3 py-1.5 text-sm font-medium ring-1 ring-slate-300 hover:bg-slate-100; }
-.chip { @apply rounded-full px-2 py-0.5 text-xs font-medium; }
+
+/* Ramp design system tokens (see DESIGN.md) */
+@theme {
+  --color-ink: #0c0a08;
+  --color-obsidian: #1a1919;
+  --color-paper: #ffffff;
+  --color-bone: #f4f2f0;
+  --color-ash: #6d6c6b;
+  --color-hairline: #e5e7eb;
+  --color-smoke: #d3d3d3;
+  --color-highlight: #e4f222;
+  --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+html, body { background: var(--color-bone); color: var(--color-ink); }
+body { font-family: var(--font-sans); font-weight: 400; font-feature-settings: "ss01" on; }
+b, strong, h1, h2, h3, th { font-weight: 400; }
+
+.card { @apply rounded-2xl border border-hairline bg-paper p-5; }
+.wash { @apply rounded-xl bg-bone p-4; }
+.label { @apply text-[10px] uppercase tracking-[0.18em] text-ash; }
+.btn { @apply inline-flex h-10 items-center justify-center rounded-md bg-highlight px-5 text-sm text-ink transition-colors hover:brightness-95 disabled:opacity-50; }
+.btn-outline { @apply inline-flex h-10 items-center justify-center rounded-md border border-ink px-3 text-sm text-ink transition-colors hover:bg-bone disabled:opacity-50; }
+.btn-ghost { @apply inline-flex h-8 items-center justify-center rounded-md px-2.5 text-sm text-ink transition-colors hover:bg-bone; }
+.tag { @apply inline-flex items-center rounded-md border border-hairline px-1.5 py-0.5 text-[11px] text-ash; }
+.tag-hi { @apply inline-flex items-center rounded-md bg-highlight px-1.5 py-0.5 text-[11px] text-ink; }
+.input { @apply h-10 rounded-[10px] border border-[rgba(33,33,33,0.1)] bg-paper px-4 text-sm text-ink outline-none focus:border-ink; }
+input[type="range"].timeline { accent-color: var(--color-highlight); }

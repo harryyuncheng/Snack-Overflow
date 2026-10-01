@@ -14,3 +14,4 @@ export const post = async <T = unknown,>(url: string, body?: unknown, method = "
 
 export const usd = (n: number, d = 0) => `$${n.toLocaleString(undefined, { minimumFractionDigits: d, maximumFractionDigits: d })}`;
 export const ZONE_LABEL: Record<string, string> = { drink_fridge: "Drink fridge", fresh_fridge: "Fresh fridge", pantry: "Pantry", coffee_bar: "Coffee bar", fruit_bowl: "Fruit bowl", freezer: "Freezer" };
+export const when = (iso: string) => new Date(iso).toLocaleString(undefined, { weekday: "short", month: "short", day: "numeric", hour: "numeric" });

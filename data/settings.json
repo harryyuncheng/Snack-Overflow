@@ -1,0 +1,10 @@
+{
+  "cadenceDays": 7,
+  "safetyStockDays": 1,
+  "healthyMixTarget": 0.3,
+  "autoApproveUnder": 300,
+  "dietaryCoverageTarget": 0.8,
+  "minutes": { "countPerSku": 0.4, "pollingPerWeek": 30, "orderingPerOrder": 60, "receiptPerOrder": 10, "reconciliationPerMonth": 90 },
+  "rampMode": "mock",
+  "visionMode": "mock"
+}

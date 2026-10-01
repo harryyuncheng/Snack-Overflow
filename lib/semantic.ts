@@ -20,13 +20,17 @@ export function sharedAttributes(q: string, p: Product) {
 }
 
 export async function semanticSearch(db: DB, query: string, opts: { k?: number; dietary?: Dietary[] } = {}) {
-  const [qv] = await getEmbedder().embed([query]);
+  // multi-ask: "I want meat, beef jerky and protein" → each ask must be satisfied (min over parts)
+  const parts = query.split(/,|;|\+|\band\b|\balso\b/i).map((x) => x.trim()).filter((x) => tokenize(x).length > 0 && !/^(?:isn'?t|not|no|without)\b/i.test(x));
+  const [qv, ...pv] = await getEmbedder().embed([query, ...(parts.length > 1 ? parts : [])]);
   const neg = negatedTerms(query);
   const required = new Set<Dietary>([...(opts.dietary ?? []), ...DIET_TOKENS.filter((d) => tokenize(query).includes(d))]);
   const results = db.products
     .filter((p) => [...required].every((d) => p.dietaryTags.includes(d)))
     .map((p) => {
-      let score = cosine(qv, p.embedding!);
+      const whole = cosine(qv, p.embedding!);
+      const partScores = pv.map((v) => cosine(v, p.embedding!));
+      let score = partScores.length ? 0.5 * whole + 0.5 * Math.min(...partScores) : whole;
       const inName = neg.some((n) => tokenize(p.name).includes(n));
       const inCategory = neg.some((n) => tokenize(p.category).includes(n));
       const penalized = inName || inCategory;
@@ -36,12 +40,12 @@ export async function semanticSearch(db: DB, query: string, opts: { k?: number; 
       if (votes.length) score += 0.06 * (votes.reduce((a, v) => a + v.value, 0) / votes.length);
       const stock = onHand(db, p.id);
       return { productId: p.id, name: p.name, emoji: p.emoji, zone: p.zone, score: Math.round(score * 1000) / 1000, inStock: stock > 0, stock,
-        why: { shared: sharedAttributes(query, p), penalized: penalized ? neg : [] } };
+        why: { shared: sharedAttributes(query, p), penalized: penalized ? neg : [], parts: partScores.length ? parts.map((q, i) => ({ q, s: Math.round(partScores[i] * 100) / 100 })) : [] } };
     })
     .sort((a, b) => b.score - a.score)
     .slice(0, opts.k ?? 6);
   const [cat] = db.categories.map((c) => ({ id: c.id, s: cosine(qv, c.embedding!) })).sort((a, b) => b.s - a.s);
-  return { results, category: cat.id, negated: neg, dietary: [...required], embedding: qv };
+  return { results, category: cat.id, negated: neg, dietary: [...required], parts: pv.length ? parts : [], embedding: qv };
 }
 
 export const STOCK_MATCH_THRESHOLD = 0.3;

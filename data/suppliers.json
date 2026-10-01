@@ -1,0 +1,6 @@
+[
+  { "id": "amazon_business", "mult": 1.0, "lead": 2, "min": 1 },
+  { "id": "costco", "mult": 0.8, "lead": 3, "min": 2 },
+  { "id": "instacart_business", "mult": 1.12, "lead": 1, "min": 1 },
+  { "id": "local_wholesale", "mult": 0.87, "lead": 2, "min": 3 }
+]

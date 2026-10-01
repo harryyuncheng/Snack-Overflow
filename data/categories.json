@@ -1,0 +1,52 @@
+[
+  {
+    "id": "chips",
+    "name": "Chips & salty",
+    "description": "Chips, popcorn, pretzels, crackers: salty crunchy savory snacks"
+  },
+  {
+    "id": "bars",
+    "name": "Bars",
+    "description": "Granola, protein, and fruit bars: chewy filling on-the-go snacks"
+  },
+  {
+    "id": "nuts",
+    "name": "Nuts",
+    "description": "Almonds, trail mix: protein-rich crunchy nuts"
+  },
+  {
+    "id": "candy",
+    "name": "Candy & treats",
+    "description": "Chocolate, gummies, ice cream: sweet indulgent treats and dessert"
+  },
+  {
+    "id": "fruit",
+    "name": "Fruit",
+    "description": "Fresh fruit: bananas, apples, clementines, sweet natural healthy"
+  },
+  {
+    "id": "yogurt",
+    "name": "Yogurt",
+    "description": "Yogurt cups: creamy dairy protein breakfast"
+  },
+  {
+    "id": "drinks",
+    "name": "Drinks",
+    "description": "Sparkling water, soda, tea, kombucha, energy drinks, fizzy beverages"
+  },
+  {
+    "id": "coffee",
+    "name": "Coffee & caffeine",
+    "description": "Coffee, cold brew, pods, tea, milk: caffeine for focus and energy"
+  },
+  {
+    "id": "healthy",
+    "name": "Healthy",
+    "description": "Veggies, hummus, salad, seaweed, light healthy low-calorie snacks"
+  },
+  {
+    "id": "other",
+    "name": "Other",
+    "description": "Everything else"
+  }
+]

@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "test": "vitest run"
+    "test": "vitest run",
+    "seed:dump": "DUMP_OUT=data/generated/seed.json vitest run scripts/dump-seed.test.ts",
+    "images:fetch": "node scripts/fetch-images.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",

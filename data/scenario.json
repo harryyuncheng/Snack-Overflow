@@ -1,0 +1,6 @@
+{
+  "_comment": "Timeline storyline: items the agent drops at switch-on, the request-cluster trial it adds, and the share of daily snacking per hour.",
+  "duds": ["kale-chips", "gin-gins", "prunes"],
+  "trialAdd": "yerba-mate",
+  "hourShare": { "9": 0.12, "10": 0.13, "11": 0.1, "12": 0.14, "13": 0.1, "14": 0.11, "15": 0.15, "16": 0.1, "17": 0.05 }
+}

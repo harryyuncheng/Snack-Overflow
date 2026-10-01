@@ -1,5 +1,6 @@
 import { getDB, getRamp } from "@/lib/store";
 import { DAY } from "@/lib/seed";
+import { planogram } from "@/lib/layout";
 export async function POST(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const db = await getDB();
@@ -26,11 +27,12 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
   const now = Date.now();
   for (const l of o.lines) {
     const p = db.products.find((x) => x.id === l.productId)!;
-    const existing = db.inventory.find((b) => b.productId === p.id);
-    const zoneCount = new Set(db.inventory.filter((b) => b.location.zone === p.zone).map((b) => b.productId)).size;
-    const location = existing?.location ?? { zone: p.zone, shelf: Math.floor(zoneCount / (p.zone === "pantry" ? 6 : 3)), slot: zoneCount % (p.zone === "pantry" ? 6 : 3) };
+    const location = planogram(db.products)[p.id];
+    db.restockFlags = db.restockFlags.filter((id) => id !== p.id);
     db.inventory.push({ id: `b${now}-${p.id}`, productId: p.id, quantity: l.cases * p.unitsPerCase, receivedAt: new Date(now).toISOString(), expiresAt: new Date(now + p.shelfLifeDays * DAY).toISOString(), location });
     if (p.trial) db.requests.filter((r) => r.matches[0]?.productId === p.id || r.matches.some((m) => m.productId === p.id && m.score > 0.3)).forEach((r) => (r.status = "added"));
   }
+  db.notifications.unshift({ id: `n${now}`, t: new Date(now).toISOString(), kind: "delivery", text: `Order ${o.id} paid on Ramp (${usdFmt(o.totalUsd)}) and restocked: ${o.lines.length} SKUs.` });
   return Response.json(o);
 }
+const usdFmt = (n: number) => `$${n.toFixed(0)}`;

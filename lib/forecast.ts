@@ -42,11 +42,13 @@ export async function draftOrder(db: DB, now = Date.now()): Promise<Order> {
     const usable = db.inventory.filter((b) => b.productId === p.id && Date.parse(b.expiresAt) > now + 3 * DAY).reduce((a, b) => a + b.quantity, 0);
     let need = demand + safety - usable;
     if (quad[p.id] === "aspirational") need *= 0.7; // try smaller quantity
+    const flagged = db.restockFlags.includes(p.id);
+    if (flagged) need = Math.max(need, p.unitsPerCase);
     if (need < p.unitsPerCase * 0.25) continue;
     const pick = pickSupplier(db.offers.filter((o) => o.productId === p.id), Math.ceil(need / p.unitsPerCase), p.shelfLifeDays);
     if (!pick) continue;
     lines.push({ productId: p.id, cases: pick.cases, casePrice: pick.offer.casePrice, supplier: pick.offer.supplier, value: ((s.netRating + 1.5) * s.rate) / pick.offer.casePrice,
-      note: `need ${Math.round(need)} units (${s.rate.toFixed(3)}/person-day × ${Math.round(horizonPD)} person-days + safety − ${usable} on hand)` });
+      note: `${flagged ? "restock flagged by staff · " : ""}need ${Math.round(need)} units (${s.rate.toFixed(3)}/person-day × ${Math.round(horizonPD)} person-days + safety − ${usable} on hand)` });
   }
 
   // trial the top item from the biggest request cluster

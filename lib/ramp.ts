@@ -22,6 +22,15 @@ class MockRamp implements RampAdapter {
   constructor(db: DB) {
     this.fund = { id: db.office.rampFundId!, name: "Office Snacks", limit: db.office.monthlyBudget, interval: "monthly", spent: 0,
       categories: ["Groceries", "Food & Beverage"], merchants: ["Amazon Business", "Costco", "Instacart Business", "Local Wholesale"], locked: false };
+    // replay this month's agent orders as agent-card charges on the fund
+    const month = new Date(); month.setDate(1); month.setHours(0, 0, 0, 0);
+    for (const o of db.orders.filter((x) => x.kind === "agent" && x.status === "received" && Date.parse(x.createdAt) >= month.getTime())) {
+      for (const sup of new Set(o.lines.map((l) => l.supplier))) {
+        const amount = round2(o.lines.filter((l) => l.supplier === sup).reduce((a, l) => a + l.cases * l.casePrice, 0));
+        this.txs.unshift({ id: `txn_${o.id}_${sup}`, fundId: this.fund.id, merchant: sup, amount, at: o.createdAt, memo: `Snack Overflow ${o.id}`, receiptAttached: true, accountingCategory: "Office Snacks & Meals" });
+        this.fund.spent = round2(this.fund.spent + amount);
+      }
+    }
   }
   async getFunds() { return [this.fund]; }
   async issueOneOffFunds(a: { name: string; amount: number }) { this.fund = { ...this.fund, name: a.name, limit: a.amount }; return this.fund; }

@@ -1,0 +1,13 @@
+{
+  "office": {
+    "id": "dm-scranton",
+    "name": "Dunder Mifflin, Scranton branch",
+    "headcount": 60,
+    "inOfficeDays": { "mon": 0.5, "tue": 0.85, "wed": 0.85, "thu": 0.85, "fri": 0.5 },
+    "monthlyBudget": 1500,
+    "rampFundId": "fund_snacks"
+  },
+  "namePool": ["Michael", "Dwight", "Jim", "Pam", "Ryan", "Andy", "Angela", "Kevin", "Oscar", "Stanley", "Phyllis", "Meredith", "Creed", "Kelly", "Toby", "Darryl", "Erin", "Gabe", "Holly", "Jan"],
+  "teamPool": ["Sales", "Accounting", "Warehouse", "HR", "Customer Service", "Management"],
+  "dietaryPool": [[], [], [], [], ["vegan", "vegetarian", "dairy_free"], ["gluten_free"], ["nut_free"], ["vegetarian"], ["gluten_free"], ["dairy_free"]]
+}

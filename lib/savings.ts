@@ -1,6 +1,6 @@
 import type { DB } from "./seed";
 import { BASELINE_SUPPLIER, baselineWeeklyUnits, round2 } from "./seed";
-import { catalogMeta } from "./catalog";
+import { catalogMeta, products as catalog } from "./catalog";
 import { productStats, quadrants, weeklyPersonDays, type ProductStats } from "./analytics";
 import type { Settings } from "./types";
 
@@ -16,7 +16,9 @@ export type Levers = { droppedDuds: number; rightSizing: number; attendanceScali
 export function computeLevers(db: DB, stats: ProductStats[]) {
   const trial = new Set(db.products.filter((p) => p.trial).map((p) => p.id));
   const quad = quadrants(stats, trial);
-  const live = db.products.filter((p) => !p.trial);
+  // the "before" world only knew the original catalog (items the agent trialed later aren't in the baseline)
+  const original = new Set(catalog.filter((p) => !p.trial).map((p) => p.id));
+  const live = db.products.filter((p) => original.has(p.id));
   const avgPop = live.reduce((a, p) => a + catalogMeta[p.id].pop, 0) / live.length;
   const wpd = weeklyPersonDays(db);
   const lev: Levers = { droppedDuds: 0, rightSizing: 0, attendanceScaling: 0, supplierSwitching: 0 };
@@ -56,22 +58,15 @@ export function timeSaved(minutes: Settings["minutes"], skuCount: number) {
   return { rows, hoursPerMonth: round2(saved / 60) };
 }
 
+/** Measured $ and kg of expiry waste per month: baseline weeks vs weeks since Snack Overflow switched on (donations excluded). */
 export function wasteSummary(db: DB) {
-  const weeks = 8;
+  const switchAt = Date.parse(db.timeline.switchAt);
   const base = db.waste.filter((w) => w.period === "baseline");
-  const baseMonthlyUsd = (base.reduce((a, w) => a + w.costUsd, 0) / weeks) * WEEKS_PER_MONTH;
-  const baseMonthlyKg = (base.reduce((a, w) => a + w.kg, 0) / weeks) * WEEKS_PER_MONTH;
-  return { baseMonthlyUsd: round2(baseMonthlyUsd), baseMonthlyKg: round2(baseMonthlyKg) };
-}
-
-/** Projected waste under Snack Overflow: duds dropped, perishables ordered to shelf life, so only residual spoilage remains. */
-export function projectedWaste(db: DB, stats: ProductStats[], residual = 0.1) {
-  const quad = quadrants(stats, new Set(db.products.filter((p) => p.trial).map((p) => p.id)));
-  const base = db.waste.filter((w) => w.period === "baseline" && quad[w.productId] !== "dud");
   const live = db.waste.filter((w) => w.period === "live" && !w.donated);
-  const usd = (base.reduce((a, w) => a + w.costUsd, 0) / 8) * WEEKS_PER_MONTH * residual * 4 + live.reduce((a, w) => a + w.costUsd, 0);
-  const kg = (base.reduce((a, w) => a + w.kg, 0) / 8) * WEEKS_PER_MONTH * residual * 4 + live.reduce((a, w) => a + w.kg, 0);
-  return { monthlyUsd: round2(usd), monthlyKg: round2(kg) };
+  const baseWeeks = 8 + 1; // 8 weeks of history + first simulated week
+  const liveWeeks = Math.max(1, (Date.now() - switchAt) / (7 * 86_400_000));
+  const perMonth = (xs: typeof base, weeks: number, k: "costUsd" | "kg") => round2((xs.reduce((a, w) => a + w[k], 0) / weeks) * WEEKS_PER_MONTH);
+  return { baseMonthlyUsd: perMonth(base, baseWeeks, "costUsd"), baseMonthlyKg: perMonth(base, baseWeeks, "kg"), liveMonthlyUsd: perMonth(live, liveWeeks, "costUsd"), liveMonthlyKg: perMonth(live, liveWeeks, "kg") };
 }
 
 export function impact(db: DB) {
@@ -80,7 +75,7 @@ export function impact(db: DB) {
   const saved = Object.values(levers).reduce((a, b) => a + b, 0);
   const time = timeSaved(db.settings.minutes, db.products.filter((p) => !p.trial).length);
   const w = wasteSummary(db);
-  const pw = projectedWaste(db, stats);
+  const pw = { monthlyUsd: w.liveMonthlyUsd, monthlyKg: w.liveMonthlyKg };
   const donated = db.waste.filter((x) => x.donated);
   const groups = [...new Set(db.employees.flatMap((e) => e.dietary))];
   const coverage = groups.map((g) => {

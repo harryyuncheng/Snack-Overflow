@@ -25,6 +25,8 @@ export type Product = {
   model3d: { shape: "bag" | "box" | "can" | "bottle" | "bar" | "fruit" | "cup"; color: string };
   /** catalog-only items that have never been stocked (trial candidates) */
   trial?: boolean;
+  /** real product photo (Open Food Facts) */
+  image?: string;
 };
 
 export type Category = { id: Product["category"]; name: string; description: string; embedding?: number[] };

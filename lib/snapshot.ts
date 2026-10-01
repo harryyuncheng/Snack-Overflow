@@ -3,6 +3,7 @@ import { productStats, quadrants } from "./analytics";
 import { clusterRequests } from "./semantic";
 import { impact } from "./savings";
 import { getRamp } from "./store";
+import { planogram } from "./layout";
 
 export async function snapshot(db: DB) {
   const stats = productStats(db);
@@ -18,6 +19,9 @@ export async function snapshot(db: DB) {
     requests: db.requests.map(({ embedding: _e, ...r }) => r).sort((a, b) => b.at.localeCompare(a.at)),
     clusters: await clusterRequests(db),
     orders: [...db.orders].sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+    layout: planogram(db.products), timeline: db.timeline, restockFlags: db.restockFlags,
+    feed: [...db.notifications, ...db.timeline.events.filter((e) => !e.projected && Date.parse(e.t) <= Date.now() && Date.parse(e.t) > Date.now() - 4 * 86_400_000)]
+      .sort((a, b) => b.t.localeCompare(a.t)).slice(0, 25),
     waste: db.waste, scans: db.scans, impact: impact(db),
     ramp: { mode: ramp.mode, fund, transactions: await ramp.listTransactions(fund.id) },
   };

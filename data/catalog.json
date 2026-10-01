@@ -1,0 +1,1268 @@
+[
+  {
+    "id": "coke",
+    "name": "Coca-Cola Classic",
+    "brand": "Coca-Cola",
+    "category": "drinks",
+    "zone": "drink_fridge",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 24,
+    "basePrice": 14,
+    "flavorProfile": [
+      "fizzy",
+      "sweet",
+      "caffeinated"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 140,
+    "model3d": {
+      "shape": "can",
+      "color": "#e41e2b"
+    },
+    "emoji": "🥤",
+    "pop": 0.09,
+    "rating": 0.3,
+    "description": "Classic full-sugar cola soda with caffeine. Sweet and fizzy."
+  },
+  {
+    "id": "diet-coke",
+    "name": "Diet Coke",
+    "brand": "Coca-Cola",
+    "category": "drinks",
+    "zone": "drink_fridge",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 24,
+    "basePrice": 14,
+    "flavorProfile": [
+      "fizzy",
+      "light",
+      "caffeinated"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 0,
+    "model3d": {
+      "shape": "can",
+      "color": "#c9c9c9"
+    },
+    "emoji": "🥤",
+    "pop": 0.05,
+    "rating": 0.2,
+    "description": "Zero-calorie diet cola with caffeine."
+  },
+  {
+    "id": "canada-dry",
+    "name": "Canada Dry Ginger Ale",
+    "brand": "Canada Dry",
+    "category": "drinks",
+    "zone": "drink_fridge",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 24,
+    "basePrice": 13,
+    "flavorProfile": [
+      "fizzy",
+      "sweet"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 140,
+    "model3d": {
+      "shape": "can",
+      "color": "#1b7a3e"
+    },
+    "emoji": "🥤",
+    "pop": 0.05,
+    "rating": 0.4,
+    "description": "Caffeine-free ginger ale soda. Crisp and bubbly."
+  },
+  {
+    "id": "fuze-tea",
+    "name": "Fuze Iced Tea Lemon",
+    "brand": "Fuze",
+    "category": "drinks",
+    "zone": "drink_fridge",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 12,
+    "basePrice": 16,
+    "flavorProfile": [
+      "sweet",
+      "fresh",
+      "caffeinated"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 90,
+    "model3d": {
+      "shape": "bottle",
+      "color": "#f2b134"
+    },
+    "emoji": "🧋",
+    "pop": 0.05,
+    "rating": 0.3,
+    "description": "Bottled black iced tea with lemon. Light caffeine, sweet."
+  },
+  {
+    "id": "lacroix-lime",
+    "name": "LaCroix Lime",
+    "brand": "LaCroix",
+    "category": "drinks",
+    "zone": "drink_fridge",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 24,
+    "basePrice": 10,
+    "flavorProfile": [
+      "fizzy",
+      "light",
+      "fresh"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 0,
+    "model3d": {
+      "shape": "can",
+      "color": "#7ed957"
+    },
+    "emoji": "🥤",
+    "pop": 0.17,
+    "rating": 0.8,
+    "description": "Unsweetened lime sparkling water. Zero calories, crisp and bubbly."
+  },
+  {
+    "id": "lacroix-pamp",
+    "name": "LaCroix Pamplemousse",
+    "brand": "LaCroix",
+    "category": "drinks",
+    "zone": "drink_fridge",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 24,
+    "basePrice": 10,
+    "flavorProfile": [
+      "fizzy",
+      "light",
+      "sour"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 0,
+    "model3d": {
+      "shape": "can",
+      "color": "#ff8a65"
+    },
+    "emoji": "🥤",
+    "pop": 0.11,
+    "rating": 0.6,
+    "description": "Grapefruit sparkling water, zero sugar, bright and tart."
+  },
+  {
+    "id": "cold-brew",
+    "name": "La Colombe Cold Brew",
+    "brand": "La Colombe",
+    "category": "coffee",
+    "zone": "drink_fridge",
+    "shelfLifeDays": 180,
+    "unitsPerCase": 12,
+    "basePrice": 30,
+    "flavorProfile": [
+      "caffeinated",
+      "creamy"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 20,
+    "model3d": {
+      "shape": "can",
+      "color": "#3e2723"
+    },
+    "emoji": "☕",
+    "pop": 0.08,
+    "rating": 0.7,
+    "description": "Ready-to-drink black cold brew coffee in a can. Strong caffeine kick."
+  },
+  {
+    "id": "kombucha",
+    "name": "GT's Synergy Gingerade",
+    "brand": "GT's",
+    "category": "drinks",
+    "zone": "drink_fridge",
+    "shelfLifeDays": 60,
+    "unitsPerCase": 12,
+    "basePrice": 38,
+    "flavorProfile": [
+      "fizzy",
+      "sour",
+      "fresh"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 50,
+    "model3d": {
+      "shape": "bottle",
+      "color": "#ffb74d"
+    },
+    "emoji": "🍾",
+    "pop": 0.025,
+    "rating": 0.5,
+    "description": "Fermented ginger kombucha tea with probiotics, lightly fizzy and tangy."
+  },
+  {
+    "id": "yerba-mate",
+    "name": "Guayakí Yerba Mate",
+    "brand": "Guayakí",
+    "category": "drinks",
+    "zone": "drink_fridge",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 12,
+    "basePrice": 30,
+    "flavorProfile": [
+      "caffeinated",
+      "fresh",
+      "fizzy"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 30,
+    "model3d": {
+      "shape": "can",
+      "color": "#9ccc65"
+    },
+    "emoji": "🧉",
+    "pop": 0.06,
+    "rating": 0.7,
+    "description": "Sparkling yerba mate: plant-based caffeine energy that isn't coffee, smooth focus for the afternoon slump.",
+    "trial": true
+  },
+  {
+    "id": "celsius",
+    "name": "Celsius Sparkling Orange",
+    "brand": "Celsius",
+    "category": "drinks",
+    "zone": "drink_fridge",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 12,
+    "basePrice": 28,
+    "flavorProfile": [
+      "caffeinated",
+      "fizzy",
+      "light"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 10,
+    "model3d": {
+      "shape": "can",
+      "color": "#ff9800"
+    },
+    "emoji": "⚡",
+    "pop": 0,
+    "rating": 0.5,
+    "description": "Sugar-free sparkling energy drink with caffeine from green tea, not coffee.",
+    "trial": true
+  },
+  {
+    "id": "chobani-plain",
+    "name": "Chobani Plain Greek Yogurt",
+    "brand": "Chobani",
+    "category": "yogurt",
+    "zone": "fresh_fridge",
+    "shelfLifeDays": 14,
+    "unitsPerCase": 12,
+    "basePrice": 15,
+    "flavorProfile": [
+      "creamy",
+      "protein"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 120,
+    "model3d": {
+      "shape": "cup",
+      "color": "#f5f1e6"
+    },
+    "emoji": "🥛",
+    "pop": 0.06,
+    "rating": 0.6,
+    "description": "Plain high-protein Greek yogurt cup. Creamy and filling."
+  },
+  {
+    "id": "chobani-straw",
+    "name": "Chobani Strawberry Yogurt",
+    "brand": "Chobani",
+    "category": "yogurt",
+    "zone": "fresh_fridge",
+    "shelfLifeDays": 14,
+    "unitsPerCase": 12,
+    "basePrice": 15,
+    "flavorProfile": [
+      "creamy",
+      "sweet"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 140,
+    "model3d": {
+      "shape": "cup",
+      "color": "#f8bbd0"
+    },
+    "emoji": "🍓",
+    "pop": 0.05,
+    "rating": 0.4,
+    "description": "Strawberry on the bottom Greek yogurt cup, sweet and creamy."
+  },
+  {
+    "id": "sabra-hummus",
+    "name": "Sabra Hummus Snack Cups",
+    "brand": "Sabra",
+    "category": "healthy",
+    "zone": "fresh_fridge",
+    "shelfLifeDays": 10,
+    "unitsPerCase": 12,
+    "basePrice": 16,
+    "flavorProfile": [
+      "savory",
+      "creamy"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 160,
+    "model3d": {
+      "shape": "cup",
+      "color": "#d7ccc8"
+    },
+    "emoji": "🫘",
+    "pop": 0.04,
+    "rating": 0.5,
+    "description": "Classic hummus snack cups. Savory plant protein."
+  },
+  {
+    "id": "babybel",
+    "name": "Mini Babybel Original",
+    "brand": "Babybel",
+    "category": "healthy",
+    "zone": "fresh_fridge",
+    "shelfLifeDays": 30,
+    "unitsPerCase": 20,
+    "basePrice": 14,
+    "flavorProfile": [
+      "savory",
+      "creamy",
+      "protein"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 70,
+    "model3d": {
+      "shape": "fruit",
+      "color": "#d32f2f"
+    },
+    "emoji": "🧀",
+    "pop": 0.06,
+    "rating": 0.6,
+    "description": "Mini semisoft cheese rounds in red wax. Quick protein snack."
+  },
+  {
+    "id": "string-cheese",
+    "name": "Sargento String Cheese",
+    "brand": "Sargento",
+    "category": "healthy",
+    "zone": "fresh_fridge",
+    "shelfLifeDays": 21,
+    "unitsPerCase": 24,
+    "basePrice": 13,
+    "flavorProfile": [
+      "savory",
+      "protein",
+      "chewy"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 80,
+    "model3d": {
+      "shape": "bar",
+      "color": "#fff59d"
+    },
+    "emoji": "🧀",
+    "pop": 0.05,
+    "rating": 0.5,
+    "description": "Mozzarella string cheese, a quick protein snack."
+  },
+  {
+    "id": "carrots",
+    "name": "Bolthouse Baby Carrots",
+    "brand": "Bolthouse Farms",
+    "category": "healthy",
+    "zone": "fresh_fridge",
+    "shelfLifeDays": 7,
+    "unitsPerCase": 12,
+    "basePrice": 14,
+    "flavorProfile": [
+      "fresh",
+      "crunchy",
+      "light"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 35,
+    "model3d": {
+      "shape": "bag",
+      "color": "#ff9800"
+    },
+    "emoji": "🥕",
+    "pop": 0.01,
+    "rating": 0.8,
+    "description": "Baby carrot snack packs. The aspirational healthy snack."
+  },
+  {
+    "id": "lays",
+    "name": "Lay's Classic Chips",
+    "brand": "Lay's",
+    "category": "chips",
+    "zone": "pantry",
+    "shelfLifeDays": 120,
+    "unitsPerCase": 40,
+    "basePrice": 22,
+    "flavorProfile": [
+      "salty",
+      "crunchy",
+      "savory"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 160,
+    "model3d": {
+      "shape": "bag",
+      "color": "#ffd200"
+    },
+    "emoji": "🥔",
+    "pop": 0.07,
+    "rating": 0.5,
+    "description": "Classic salted potato chips."
+  },
+  {
+    "id": "kettle",
+    "name": "Kettle Brand Sea Salt",
+    "brand": "Kettle Brand",
+    "category": "chips",
+    "zone": "pantry",
+    "shelfLifeDays": 120,
+    "unitsPerCase": 24,
+    "basePrice": 21,
+    "flavorProfile": [
+      "salty",
+      "crunchy",
+      "savory"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 150,
+    "model3d": {
+      "shape": "bag",
+      "color": "#2f6fb6"
+    },
+    "emoji": "🥔",
+    "pop": 0.08,
+    "rating": 0.7,
+    "description": "Thick-cut kettle cooked potato chips with sea salt."
+  },
+  {
+    "id": "cheetos",
+    "name": "Flamin' Hot Cheetos",
+    "brand": "Cheetos",
+    "category": "chips",
+    "zone": "pantry",
+    "shelfLifeDays": 90,
+    "unitsPerCase": 40,
+    "basePrice": 24,
+    "flavorProfile": [
+      "spicy",
+      "crunchy",
+      "salty",
+      "indulgent"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "nut_free"
+    ],
+    "caloriesPerServing": 170,
+    "model3d": {
+      "shape": "bag",
+      "color": "#e53935"
+    },
+    "emoji": "🔥",
+    "pop": 0.09,
+    "rating": -0.4,
+    "description": "Hot chili cheese puffs. Messy, spicy, indulgent: the guilty pleasure."
+  },
+  {
+    "id": "skinnypop",
+    "name": "SkinnyPop Popcorn",
+    "brand": "SkinnyPop",
+    "category": "healthy",
+    "zone": "pantry",
+    "shelfLifeDays": 180,
+    "unitsPerCase": 24,
+    "basePrice": 20,
+    "flavorProfile": [
+      "salty",
+      "crunchy",
+      "light"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 100,
+    "model3d": {
+      "shape": "bag",
+      "color": "#2e7dbe"
+    },
+    "emoji": "🍿",
+    "pop": 0.07,
+    "rating": 0.7,
+    "description": "Popcorn with sea salt, a lighter crunchy alternative to potato chips."
+  },
+  {
+    "id": "pretzels",
+    "name": "Snyder's Mini Pretzels",
+    "brand": "Snyder's",
+    "category": "chips",
+    "zone": "pantry",
+    "shelfLifeDays": 180,
+    "unitsPerCase": 24,
+    "basePrice": 15,
+    "flavorProfile": [
+      "salty",
+      "crunchy"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "nut_free"
+    ],
+    "caloriesPerServing": 110,
+    "model3d": {
+      "shape": "bag",
+      "color": "#c62828"
+    },
+    "emoji": "🥨",
+    "pop": 0.04,
+    "rating": 0.3,
+    "description": "Crunchy salted mini pretzels."
+  },
+  {
+    "id": "kale-chips",
+    "name": "Rhythm Kale Chips",
+    "brand": "Rhythm Superfoods",
+    "category": "healthy",
+    "zone": "pantry",
+    "shelfLifeDays": 60,
+    "unitsPerCase": 12,
+    "basePrice": 36,
+    "flavorProfile": [
+      "savory",
+      "crunchy",
+      "light"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 120,
+    "model3d": {
+      "shape": "bag",
+      "color": "#2e7d32"
+    },
+    "emoji": "🥬",
+    "pop": 0.003,
+    "rating": -0.6,
+    "description": "Baked kale chips with nutritional yeast. Earthy, crumbly."
+  },
+  {
+    "id": "gin-gins",
+    "name": "Gin Gins Ginger Chews",
+    "brand": "The Ginger People",
+    "category": "candy",
+    "zone": "pantry",
+    "shelfLifeDays": 365,
+    "unitsPerCase": 24,
+    "basePrice": 30,
+    "flavorProfile": [
+      "sweet",
+      "spicy",
+      "chewy"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 40,
+    "model3d": {
+      "shape": "bag",
+      "color": "#f9a825"
+    },
+    "emoji": "🫚",
+    "pop": 0.002,
+    "rating": -0.7,
+    "description": "Chewy ginger candy. Intensely spicy-sweet; nobody's first pick."
+  },
+  {
+    "id": "prunes",
+    "name": "Sunsweet Pitted Prunes",
+    "brand": "Sunsweet",
+    "category": "fruit",
+    "zone": "pantry",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 12,
+    "basePrice": 28,
+    "flavorProfile": [
+      "sweet",
+      "chewy"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 100,
+    "model3d": {
+      "shape": "bag",
+      "color": "#4a148c"
+    },
+    "emoji": "🟣",
+    "pop": 0.002,
+    "rating": -0.6,
+    "description": "Dried pitted prunes. High fiber, low demand."
+  },
+  {
+    "id": "marys-crackers",
+    "name": "Mary's Gone Crackers",
+    "brand": "Mary's Gone Crackers",
+    "category": "chips",
+    "zone": "pantry",
+    "shelfLifeDays": 240,
+    "unitsPerCase": 12,
+    "basePrice": 30,
+    "flavorProfile": [
+      "salty",
+      "crunchy",
+      "light"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 140,
+    "model3d": {
+      "shape": "box",
+      "color": "#6d4c41"
+    },
+    "emoji": "🍘",
+    "pop": 0.03,
+    "rating": 0.4,
+    "description": "Gluten-free organic seed crackers."
+  },
+  {
+    "id": "quest",
+    "name": "Quest Protein Bar",
+    "brand": "Quest",
+    "category": "bars",
+    "zone": "pantry",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 12,
+    "basePrice": 26,
+    "flavorProfile": [
+      "protein",
+      "sweet",
+      "chewy"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "gluten_free"
+    ],
+    "caloriesPerServing": 200,
+    "model3d": {
+      "shape": "bar",
+      "color": "#212121"
+    },
+    "emoji": "🍫",
+    "pop": 0.06,
+    "rating": 0.5,
+    "description": "21g protein cookie dough bar. Chewy, filling, gym-friendly."
+  },
+  {
+    "id": "nature-valley",
+    "name": "Nature Valley Oats 'n Honey",
+    "brand": "Nature Valley",
+    "category": "bars",
+    "zone": "pantry",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 48,
+    "basePrice": 22,
+    "flavorProfile": [
+      "sweet",
+      "crunchy"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 190,
+    "model3d": {
+      "shape": "bar",
+      "color": "#2e7d32"
+    },
+    "emoji": "🌾",
+    "pop": 0.06,
+    "rating": 0.4,
+    "description": "Crunchy oats and honey granola bars."
+  },
+  {
+    "id": "kind",
+    "name": "KIND Dark Chocolate Nuts",
+    "brand": "KIND",
+    "category": "bars",
+    "zone": "pantry",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 12,
+    "basePrice": 20,
+    "flavorProfile": [
+      "sweet",
+      "crunchy",
+      "protein"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "gluten_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 200,
+    "model3d": {
+      "shape": "bar",
+      "color": "#90a4ae"
+    },
+    "emoji": "🥜",
+    "pop": 0.05,
+    "rating": 0.6,
+    "description": "Whole almonds and dark chocolate bar. Contains tree nuts."
+  },
+  {
+    "id": "larabar",
+    "name": "Larabar Cashew Cookie",
+    "brand": "Larabar",
+    "category": "healthy",
+    "zone": "pantry",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 16,
+    "basePrice": 24,
+    "flavorProfile": [
+      "light",
+      "sweet",
+      "chewy"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 230,
+    "model3d": {
+      "shape": "bar",
+      "color": "#c5e1a5"
+    },
+    "emoji": "🌱",
+    "pop": 0.008,
+    "rating": 0.8,
+    "description": "Two-ingredient cashew and date bar. Voted up, rarely eaten."
+  },
+  {
+    "id": "jerky",
+    "name": "Jack Link's Beef Jerky",
+    "brand": "Jack Link's",
+    "category": "other",
+    "zone": "pantry",
+    "shelfLifeDays": 365,
+    "unitsPerCase": 12,
+    "basePrice": 34,
+    "flavorProfile": [
+      "savory",
+      "protein",
+      "chewy",
+      "salty"
+    ],
+    "dietaryTags": [
+      "gluten_free",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 80,
+    "model3d": {
+      "shape": "bag",
+      "color": "#5d4037"
+    },
+    "emoji": "🥩",
+    "pop": 0.04,
+    "rating": 0.6,
+    "description": "Original beef jerky: high-protein dried meat snack, savory and chewy."
+  },
+  {
+    "id": "almonds",
+    "name": "Blue Diamond Almonds",
+    "brand": "Blue Diamond",
+    "category": "nuts",
+    "zone": "pantry",
+    "shelfLifeDays": 240,
+    "unitsPerCase": 24,
+    "basePrice": 26,
+    "flavorProfile": [
+      "salty",
+      "crunchy",
+      "protein"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 170,
+    "model3d": {
+      "shape": "bag",
+      "color": "#1565c0"
+    },
+    "emoji": "🌰",
+    "pop": 0.04,
+    "rating": 0.5,
+    "description": "Lightly salted roasted almonds in single-serve packs."
+  },
+  {
+    "id": "trail-mix",
+    "name": "Planters Trail Mix",
+    "brand": "Planters",
+    "category": "nuts",
+    "zone": "pantry",
+    "shelfLifeDays": 180,
+    "unitsPerCase": 24,
+    "basePrice": 22,
+    "flavorProfile": [
+      "sweet",
+      "salty",
+      "crunchy"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "gluten_free"
+    ],
+    "caloriesPerServing": 180,
+    "model3d": {
+      "shape": "bag",
+      "color": "#ffb300"
+    },
+    "emoji": "🥜",
+    "pop": 0.04,
+    "rating": 0.4,
+    "description": "Peanuts, raisins, and chocolate candies."
+  },
+  {
+    "id": "seaweed",
+    "name": "gimMe Seaweed Snacks",
+    "brand": "gimMe",
+    "category": "healthy",
+    "zone": "pantry",
+    "shelfLifeDays": 240,
+    "unitsPerCase": 24,
+    "basePrice": 22,
+    "flavorProfile": [
+      "salty",
+      "crunchy",
+      "light",
+      "savory"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 30,
+    "model3d": {
+      "shape": "box",
+      "color": "#1b5e20"
+    },
+    "emoji": "🌊",
+    "pop": 0.02,
+    "rating": 0.3,
+    "description": "Crispy roasted seaweed sheets with sea salt."
+  },
+  {
+    "id": "snickers",
+    "name": "Snickers",
+    "brand": "Mars",
+    "category": "candy",
+    "zone": "pantry",
+    "shelfLifeDays": 300,
+    "unitsPerCase": 48,
+    "basePrice": 38,
+    "flavorProfile": [
+      "sweet",
+      "indulgent",
+      "chewy"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "gluten_free"
+    ],
+    "caloriesPerServing": 250,
+    "model3d": {
+      "shape": "bar",
+      "color": "#4e342e"
+    },
+    "emoji": "🍫",
+    "pop": 0.07,
+    "rating": 0.3,
+    "description": "Milk chocolate, peanuts, caramel and nougat candy bar."
+  },
+  {
+    "id": "haribo",
+    "name": "Haribo Goldbears",
+    "brand": "Haribo",
+    "category": "candy",
+    "zone": "pantry",
+    "shelfLifeDays": 365,
+    "unitsPerCase": 24,
+    "basePrice": 18,
+    "flavorProfile": [
+      "sweet",
+      "chewy"
+    ],
+    "dietaryTags": [
+      "gluten_free",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 140,
+    "model3d": {
+      "shape": "bag",
+      "color": "#ffd600"
+    },
+    "emoji": "🐻",
+    "pop": 0.05,
+    "rating": 0.2,
+    "description": "Fruit-flavored gummy bears."
+  },
+  {
+    "id": "kcups",
+    "name": "Green Mountain K-Cups",
+    "brand": "Green Mountain",
+    "category": "coffee",
+    "zone": "coffee_bar",
+    "shelfLifeDays": 240,
+    "unitsPerCase": 48,
+    "basePrice": 34,
+    "flavorProfile": [
+      "caffeinated"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 5,
+    "model3d": {
+      "shape": "box",
+      "color": "#2e7d32"
+    },
+    "emoji": "☕",
+    "pop": 0.22,
+    "rating": 0.6,
+    "description": "Breakfast blend single-serve coffee pods."
+  },
+  {
+    "id": "oatly",
+    "name": "Oatly Barista Edition",
+    "brand": "Oatly",
+    "category": "coffee",
+    "zone": "coffee_bar",
+    "shelfLifeDays": 30,
+    "unitsPerCase": 6,
+    "basePrice": 24,
+    "flavorProfile": [
+      "creamy"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 120,
+    "model3d": {
+      "shape": "box",
+      "color": "#e8e3d3"
+    },
+    "emoji": "🥛",
+    "pop": 0.03,
+    "rating": 0.6,
+    "description": "Barista oat milk for lattes. Dairy-free creamer."
+  },
+  {
+    "id": "twinings",
+    "name": "Twinings Green Tea",
+    "brand": "Twinings",
+    "category": "coffee",
+    "zone": "coffee_bar",
+    "shelfLifeDays": 540,
+    "unitsPerCase": 100,
+    "basePrice": 14,
+    "flavorProfile": [
+      "caffeinated",
+      "fresh",
+      "light"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 0,
+    "model3d": {
+      "shape": "box",
+      "color": "#66bb6a"
+    },
+    "emoji": "🍵",
+    "pop": 0.04,
+    "rating": 0.4,
+    "description": "Green tea bags. Lighter caffeine, not coffee."
+  },
+  {
+    "id": "bananas",
+    "name": "Bananas",
+    "brand": "Local farm",
+    "category": "fruit",
+    "zone": "fruit_bowl",
+    "shelfLifeDays": 6,
+    "unitsPerCase": 18,
+    "basePrice": 7,
+    "flavorProfile": [
+      "sweet",
+      "fresh",
+      "light"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 105,
+    "model3d": {
+      "shape": "fruit",
+      "color": "#ffe135"
+    },
+    "emoji": "🍌",
+    "pop": 0.11,
+    "rating": 0.6,
+    "description": "Fresh bananas. Quick natural sugar."
+  },
+  {
+    "id": "apples",
+    "name": "Honeycrisp Apples",
+    "brand": "Local farm",
+    "category": "fruit",
+    "zone": "fruit_bowl",
+    "shelfLifeDays": 21,
+    "unitsPerCase": 24,
+    "basePrice": 18,
+    "flavorProfile": [
+      "sweet",
+      "crunchy",
+      "fresh"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 95,
+    "model3d": {
+      "shape": "fruit",
+      "color": "#c62828"
+    },
+    "emoji": "🍎",
+    "pop": 0.06,
+    "rating": 0.6,
+    "description": "Crisp honeycrisp apples."
+  },
+  {
+    "id": "clementines",
+    "name": "Clementines",
+    "brand": "Local farm",
+    "category": "fruit",
+    "zone": "fruit_bowl",
+    "shelfLifeDays": 10,
+    "unitsPerCase": 24,
+    "basePrice": 11,
+    "flavorProfile": [
+      "sweet",
+      "sour",
+      "fresh"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 35,
+    "model3d": {
+      "shape": "fruit",
+      "color": "#ff8f00"
+    },
+    "emoji": "🍊",
+    "pop": 0.05,
+    "rating": 0.7,
+    "description": "Easy-peel seedless clementines."
+  },
+  {
+    "id": "magnum",
+    "name": "Magnum Classic",
+    "brand": "Magnum",
+    "category": "candy",
+    "zone": "freezer",
+    "shelfLifeDays": 180,
+    "unitsPerCase": 24,
+    "basePrice": 30,
+    "flavorProfile": [
+      "sweet",
+      "creamy",
+      "indulgent"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 240,
+    "model3d": {
+      "shape": "bar",
+      "color": "#4e342e"
+    },
+    "emoji": "🍦",
+    "pop": 0.03,
+    "rating": 0.7,
+    "description": "Belgian chocolate-coated vanilla ice cream bar."
+  },
+  {
+    "id": "outshine",
+    "name": "Outshine Mango Bars",
+    "brand": "Outshine",
+    "category": "fruit",
+    "zone": "freezer",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 24,
+    "basePrice": 22,
+    "flavorProfile": [
+      "sweet",
+      "fresh",
+      "light"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 70,
+    "model3d": {
+      "shape": "bar",
+      "color": "#ffa726"
+    },
+    "emoji": "🥭",
+    "pop": 0.015,
+    "rating": 0.4,
+    "description": "Frozen real-mango fruit bars."
+  }
+]
