@@ -1,5 +1,5 @@
 "use client";
-import { Html } from "@react-three/drei";
+import LabelSprite from "./LabelSprite";
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
@@ -226,9 +226,7 @@ export function ProductUnits({ p, loc, stock, price, visual, onHover, onSelect }
         </mesh>
       )}
       {visual.showTag && visible > 0 && (
-        <Html position={[top.x, top.y + 0.02, top.z]} center zIndexRange={[10, 0]}>
-          <div style={{ pointerEvents: "none", whiteSpace: "nowrap", background: "#e4f222", color: "#0c0a08", borderRadius: 6, padding: "1px 6px", fontSize: 10, letterSpacing: "0.018em", textTransform: "uppercase", fontWeight: 400 }}>eat me first</div>
-        </Html>
+        <LabelSprite text="eat me first" pos={[top.x, top.y + 0.04, top.z]} bg="#e4f222" border="#e4f222" height={0.024} />
       )}
     </group>
   );

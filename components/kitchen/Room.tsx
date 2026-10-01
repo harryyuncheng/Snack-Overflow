@@ -1,5 +1,6 @@
 "use client";
-import { Html, RoundedBox } from "@react-three/drei";
+import { RoundedBox } from "@react-three/drei";
+import LabelSprite from "./LabelSprite";
 import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
@@ -8,13 +9,9 @@ import { ZONES, ISLAND, BOWL } from "./zones";
 import { corkTexture, subwayTileTexture, windowSkyTexture, woodFloorTexture } from "./textures";
 
 const WALL = "#ece5da";
-const labelStyle: React.CSSProperties = {
-  pointerEvents: "none", whiteSpace: "nowrap", background: "#ffffff", color: "#0c0a08", border: "1px solid #e5e7eb",
-  borderRadius: 6, padding: "2px 8px", fontSize: 10, letterSpacing: "0.018em", textTransform: "uppercase", fontWeight: 400,
-};
 
 export function ZoneLabel({ text, pos }: { text: string; pos: [number, number, number] }) {
-  return <Html position={pos} center zIndexRange={[5, 0]}><div style={labelStyle}>{text}</div></Html>;
+  return <LabelSprite text={text} pos={pos} />;
 }
 
 function Fridge({ zone, open, onToggle, body }: { zone: Zone; open: boolean; onToggle: () => void; body: string }) {

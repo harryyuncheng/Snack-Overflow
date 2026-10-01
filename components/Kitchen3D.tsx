@@ -1,6 +1,5 @@
 "use client";
 import { Canvas } from "@react-three/fiber";
-import { Html } from "@react-three/drei";
 import { useState } from "react";
 import * as THREE from "three";
 import type { Product, Zone } from "@/lib/types";
@@ -33,10 +32,13 @@ const NONE: ItemStatus = { lowStock: false, nearExpiry: false, eatFirst: false, 
 
 export default function Kitchen3D({ products, layout, stock, status, overlay, dietary, highlights, selected, onSelect, focusZone }: KitchenProps) {
   const [hover, setHover] = useState<{ id: string; pos: THREE.Vector3 } | null>(null);
+  const [mouse, setMouse] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [doors, setDoors] = useState<Record<string, boolean>>({ drink_fridge: false, fresh_fridge: false });
   const hp = hover && products.find((p) => p.id === hover.id);
   const hs = hover ? status[hover.id] ?? NONE : null;
+  // tooltip is plain DOM next to the canvas (drei <Html> roots warn on unmount under React 19)
   return (
+    <div className="relative h-full w-full" onPointerMove={(e) => { const r = e.currentTarget.getBoundingClientRect(); setMouse({ x: e.clientX - r.left, y: e.clientY - r.top }); }}>
     <Canvas
       shadows
       dpr={[1, 1.5]}
@@ -73,20 +75,19 @@ export default function Kitchen3D({ products, layout, stock, status, overlay, di
           />
         );
       })}
-      {hp && hs && (
-        <Html position={hover!.pos} center zIndexRange={[20, 0]} style={{ transform: "translateY(-60%)" }}>
-          <div style={tipStyle}>
-            <div style={{ fontSize: 14 }}>{hp.name}</div>
-            <div style={{ ...micro, marginBottom: 6 }}>{hp.brand}</div>
-            <Row k="In stock" v={`${stock[hp.id] ?? 0}${hs.lowStock ? " · low" : ""}`} />
-            <Row k="Expires" v={hs.daysToExpiry === null ? "–" : `${hs.daysToExpiry} days`} alert={hs.nearExpiry} />
-            <Row k="Rating" v={`${Math.round(hs.netRating * 100)}% net`} />
-            <Row k="Eaten" v={`${hs.perDay.toFixed(1)} / day`} />
-          </div>
-        </Html>
-      )}
       <Player focusZone={focusZone} />
     </Canvas>
+    {hp && hs && (
+      <div style={{ ...tipStyle, position: "absolute", left: mouse.x + 16, top: mouse.y + 16, zIndex: 20 }}>
+        <div style={{ fontSize: 14 }}>{hp.name}</div>
+        <div style={{ ...micro, marginBottom: 6 }}>{hp.brand}</div>
+        <Row k="In stock" v={`${stock[hp.id] ?? 0}${hs.lowStock ? " · low" : ""}`} />
+        <Row k="Expires" v={hs.daysToExpiry === null ? "–" : `${hs.daysToExpiry} days`} alert={hs.nearExpiry} />
+        <Row k="Rating" v={`${Math.round(hs.netRating * 100)}% net`} />
+        <Row k="Eaten" v={`${hs.perDay.toFixed(1)} / day`} />
+      </div>
+    )}
+    </div>
   );
 }
 
