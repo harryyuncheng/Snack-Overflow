@@ -14,7 +14,7 @@ export async function POST() {
 • Waste: projected down ${i.waste.reductionPct.toFixed(0)}% ($${i.waste.baseMonthlyUsd.toFixed(0)} → $${i.waste.projectedUsd.toFixed(0)}/mo); ${i.waste.donatedKg}kg donated.
 • Top movers: ${top.join(", ")}. Dropping: ${duds.join(", ") || "none"}.
 • Top request theme: "${s.clusters[0]?.label}" (${s.clusters[0]?.upvotes} votes) — trialing next order.
-• Cost/employee: $${i.costPerEmployee.now}/mo (benchmark $10–25).`;
+• Cost/employee: $${i.costPerEmployee.now}/mo (self-managed benchmark $50–150).`;
   const text = await llm(`Rewrite this office snack program digest for leadership/finance in Slack markdown, under 120 words, keep all numbers:\n${fallback}`, fallback);
   return Response.json({ text });
 }

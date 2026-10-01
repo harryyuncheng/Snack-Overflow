@@ -8,7 +8,7 @@ import { BOUNDS, ISLAND, stationFor } from "./zones";
 const YAW_LIMIT = THREE.MathUtils.degToRad(100); // keep the snack wall in view
 const PITCH_MIN = THREE.MathUtils.degToRad(-60), PITCH_MAX = THREE.MathUtils.degToRad(20);
 const DRAG_SPEED = 0.0045; // radians per dragged pixel
-const SPEED = 3.0, ACCEL = 9;
+const SPEED = 4.2, ACCEL = 11;
 const damp = (k: number, dt: number) => 1 - Math.exp(-k * dt);
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 

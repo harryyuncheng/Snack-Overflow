@@ -13,11 +13,11 @@ import { canGeometry, canLabelTexture } from "./cans";
 
 export type Shape = Product["model3d"]["shape"];
 export const SIZE: Record<Shape, [number, number, number]> = {
-  can: [0.075, 0.135, 0.075], bottle: [0.12, 0.3, 0.12], bag: [0.2, 0.28, 0.08], box: [0.19, 0.24, 0.08], bar: [0.17, 0.075, 0.032], fruit: [0.13, 0.13, 0.13], cup: [0.12, 0.1, 0.12],
+  can: [0.075, 0.135, 0.075], bottle: [0.12, 0.3, 0.12], bag: [0.22, 0.3, 0.085], box: [0.19, 0.27, 0.07], bar: [0.16, 0.065, 0.028], fruit: [0.13, 0.13, 0.13], cup: [0.12, 0.1, 0.12],
 };
 /** Per-product overrides where the generic shape size reads wrong. */
 const SIZE_BY_ID: Record<string, [number, number, number]> = {
-  babybel: [0.075, 0.042, 0.075], bananas: [0.34, 0.2, 0.34], apples: [0.11, 0.11, 0.11], clementines: [0.085, 0.075, 0.085],
+  babybel: [0.075, 0.042, 0.075], "red-bull": [0.062, 0.15, 0.062], pringles: [0.085, 0.25, 0.085], bananas: [0.34, 0.2, 0.34], apples: [0.11, 0.11, 0.11], clementines: [0.085, 0.075, 0.085],
 };
 export const sizeFor = (p: Product): [number, number, number] => SIZE_BY_ID[p.id] ?? SIZE[p.model3d.shape];
 const MODEL_FRUIT: Record<string, string> = { bananas: MODEL.bananas, apples: MODEL.apple, clementines: MODEL.lime };
@@ -39,7 +39,7 @@ function babybelGeometry([w, h]: [number, number, number]) {
   pts.push(new THREE.Vector2(0, h / 2));
   return new THREE.LatheGeometry(pts, 28);
 }
-const MAX_UNITS = 16;
+const MAX_UNITS = 32;
 const HIGHLIGHT = new THREE.Color("#e4f222");
 
 export type Visual = {
@@ -110,8 +110,9 @@ function unitLayout(p: Product, loc: Location): Unit[] {
   const gap = (usable - cols * w) / Math.max(1, cols);
   const out: Unit[] = [];
   for (let layer = 0; layer < layers; layer++)
-    for (let row = 0; row < rows; row++)
+    for (let rr = 0; rr < rows; rr++)
       for (let c = 0; c < cols; c++) {
+        const row = rows - 1 - rr; // front row first
         const i = out.length;
         if (i >= MAX_UNITS) break;
         const jx = (r(i, 0) - 0.5) * 0.022, jz = (r(i, 1) - 0.5) * 0.025;
@@ -228,7 +229,10 @@ function ProductUnitsInner({ p, loc, stock, price, visual, onHover, onSelect }: 
     m.instanceMatrix.needsUpdate = true;
     m.computeBoundingSphere();
   }, [units]);
-  const visible = Math.min(units.length, Math.max(0, Math.ceil(stock / (PER_UNIT[p.id] ?? 1))));
+  // shelves read as stocked: visible units saturate with stock (front rows fill first); bowl fruit stays 1:1
+  const visible = loc.zone === "fruit_bowl"
+    ? Math.min(units.length, Math.max(0, Math.ceil(stock / (PER_UNIT[p.id] ?? 1))))
+    : stock <= 0 ? 0 : Math.min(units.length, Math.max(1, Math.ceil(units.length * (1 - Math.exp(-stock / 12)))));
   useLayoutEffect(() => { if (mesh.current) mesh.current.count = visible; }, [visible]);
 
   const v = useRef(visual);

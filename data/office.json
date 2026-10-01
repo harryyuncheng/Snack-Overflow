@@ -4,7 +4,7 @@
     "name": "Dunder Mifflin, Scranton branch",
     "headcount": 60,
     "inOfficeDays": { "mon": 0.5, "tue": 0.85, "wed": 0.85, "thu": 0.85, "fri": 0.5 },
-    "monthlyBudget": 1500,
+    "monthlyBudget": 2500,
     "rampFundId": "fund_snacks"
   },
   "namePool": ["Michael", "Dwight", "Jim", "Pam", "Ryan", "Andy", "Angela", "Kevin", "Oscar", "Stanley", "Phyllis", "Meredith", "Creed", "Kelly", "Toby", "Darryl", "Erin", "Gabe", "Holly", "Jan"],

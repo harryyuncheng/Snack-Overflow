@@ -4,7 +4,7 @@ import type { Zone } from "@/lib/types";
 export const ZONES: Record<Zone, { origin: [number, number, number]; width: number; shelfY: number[]; depth: number; label: string }> = {
   drink_fridge: { origin: [-6.2, 0, -1.6], width: 1.8, shelfY: [0.32, 1.02, 1.72, 2.42], depth: 0.72, label: "Drink fridge" },
   fresh_fridge: { origin: [-3.6, 0, -1.6], width: 1.8, shelfY: [0.32, 1.02, 1.72, 2.42], depth: 0.72, label: "Fresh fridge" },
-  pantry: { origin: [-1.3, 0, -1.7], width: 3.6, shelfY: [0.32, 0.92, 1.52, 2.12], depth: 0.44, label: "Pantry" },
+  pantry: { origin: [-1.4, 0, -1.7], width: 4.2, shelfY: [0.35, 0.75, 1.15, 1.55, 1.95], depth: 0.42, label: "Pantry" },
   coffee_bar: { origin: [3.15, 0, -1.68], width: 1.5, shelfY: [0.945, 1.62], depth: 0.42, label: "Coffee bar" },
   fruit_bowl: { origin: [0.05, 0, 3.35], width: 1.1, shelfY: [1.0], depth: 0.5, label: "Fruit bowl" },
   freezer: { origin: [7.45, 0, -1.6], width: 1.2, shelfY: [0.32, 1.02, 1.72], depth: 0.72, label: "Freezer" },
@@ -18,7 +18,7 @@ export const STATIONS: Record<Zone | "overview", { pos: [number, number, number]
   overview: { pos: [0.9, 2.1, 8.6], look: [0.9, 1.15, -1.5] },
   drink_fridge: { pos: [-5.3, 1.6, 1.95], look: [-5.3, 1.3, -1.4] },
   fresh_fridge: { pos: [-2.7, 1.6, 1.95], look: [-2.7, 1.3, -1.4] },
-  pantry: { pos: [0.5, 1.6, 2.45], look: [0.5, 1.2, -1.5] },
+  pantry: { pos: [0.7, 1.55, 2.4], look: [0.7, 1.15, -1.5] },
   coffee_bar: { pos: [3.9, 1.6, 1.4], look: [3.9, 1.15, -1.45] },
   fruit_bowl: { pos: [0.6, 1.7, 5.1], look: [0.6, 0.95, 3.6] },
   freezer: { pos: [8.0, 1.75, 1.3], look: [8.0, 0.6, -1.0] },

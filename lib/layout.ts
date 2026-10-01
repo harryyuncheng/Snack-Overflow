@@ -1,6 +1,6 @@
 import type { Product, Zone } from "./types";
 
-export const SLOTS_PER_SHELF: Record<Zone, number> = { drink_fridge: 3, fresh_fridge: 3, pantry: 5, coffee_bar: 3, fruit_bowl: 3, freezer: 2 };
+export const SLOTS_PER_SHELF: Record<Zone, number> = { drink_fridge: 4, fresh_fridge: 3, pantry: 7, coffee_bar: 3, fruit_bowl: 3, freezer: 2 };
 export type Location = { zone: Zone; shelf: number; slot: number };
 
 /** Fixed planogram: every catalog item (incl. trial items) owns a shelf slot, so the timeline can show it appear/disappear. */

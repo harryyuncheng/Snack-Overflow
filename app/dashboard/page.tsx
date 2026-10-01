@@ -53,7 +53,7 @@ export default function Dashboard() {
           <Counter l="Saved / month" v={usd(i.savedMonthly)} s={`${Math.round(i.savedPct)}% vs ${usd(i.baselineMonthly)} before`} hi />
           <Counter l="Time back / month" v={`${Math.round(i.time.hoursPerMonth)} hrs`} s="counting, polls, orders, receipts" />
           <Counter l="Expired food" v={`−${Math.round(i.waste.reductionPct)}%`} s={`${usd(i.waste.baseMonthlyUsd)} → ${usd(i.waste.projectedUsd)}/mo · ${Math.round((Date.now() - Date.parse(data.timeline.switchAt)) / 86_400_000)} days of data · ${i.waste.donatedKg} kg donated`} />
-          <Counter l="Cost / employee" v={`${usd(i.costPerEmployee.now)}/mo`} s={`was ${usd(i.costPerEmployee.baseline)} · benchmark $10–25`} />
+          <Counter l="Cost / employee" v={`${usd(i.costPerEmployee.now)}/mo`} s={`was ${usd(i.costPerEmployee.baseline)} · self-managed benchmark $50–150`} />
           <Counter l="People like it" v={`${Math.round(((i.satisfaction + 1) / 2) * 100)}%`} s="consumption-weighted votes" />
           <Counter l="Ramp fund left" v={usd(data.ramp.fund.limit - data.ramp.fund.spent)} s={`of ${usd(data.ramp.fund.limit)} · Office Snacks`} />
         </div>

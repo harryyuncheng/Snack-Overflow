@@ -126,19 +126,19 @@ export default function Room({ doors, toggleDoor }: { doors: Record<string, bool
       <Fridge zone="fresh_fridge" open={doors.fresh_fridge} onToggle={() => toggleDoor("fresh_fridge")} body="#cfd3d8" />
 
       {/* pantry: open shelving with back panel */}
-      <mesh position={[P.origin[0] + P.width / 2, 1.3, P.origin[2] - 0.02]} receiveShadow><boxGeometry args={[P.width + 0.1, 2.6, 0.02]} /><meshStandardMaterial color="#e9dcc7" roughness={0.9} /></mesh>
+      <mesh position={[P.origin[0] + P.width / 2, 1.08, P.origin[2] - 0.02]} receiveShadow><boxGeometry args={[P.width + 0.1, 2.16, 0.02]} /><meshStandardMaterial color="#e9dcc7" roughness={0.9} /></mesh>
       {P.shelfY.map((y) => (
         <mesh key={y} position={[P.origin[0] + P.width / 2, y - 0.02, P.origin[2] + P.depth / 2]} castShadow receiveShadow><boxGeometry args={[P.width + 0.1, 0.035, P.depth + 0.02]} />{wood}</mesh>
       ))}
-      <mesh position={[P.origin[0] + P.width / 2, 2.62, P.origin[2] + P.depth / 2]} castShadow><boxGeometry args={[P.width + 0.1, 0.035, P.depth + 0.02]} />{wood}</mesh>
-      {[0, P.width / 2, P.width].map((dx) => <mesh key={dx} position={[P.origin[0] + dx, 1.31, P.origin[2] + P.depth / 2]} castShadow><boxGeometry args={[0.04, 2.62, P.depth + 0.02]} />{wood}</mesh>)}
-      <ZoneLabel text={P.label} pos={[P.origin[0] + P.width / 2, 2.85, P.origin[2] + 0.3]} />
+      <mesh position={[P.origin[0] + P.width / 2, 2.16, P.origin[2] + P.depth / 2]} castShadow><boxGeometry args={[P.width + 0.1, 0.035, P.depth + 0.02]} />{wood}</mesh>
+      {[0, P.width].map((dx) => <mesh key={dx} position={[P.origin[0] + dx, 1.09, P.origin[2] + P.depth / 2]} castShadow><boxGeometry args={[0.04, 2.18, P.depth + 0.02]} />{wood}</mesh>)}
+      <ZoneLabel text={P.label} pos={[P.origin[0] + P.width / 2, 2.4, P.origin[2] + 0.3]} />
 
       {/* Ramp banner above the pantry + Snack Overflow sign above the fridges */}
       <mesh position={[P.origin[0] + P.width / 2, 3.08, -1.735]}><planeGeometry args={[3.6, 0.6]} /><meshBasicMaterial map={ramp} toneMapped={false} /></mesh>
       <mesh position={[-3.9, 3.17, -1.735]}><planeGeometry args={[2.6, 0.49]} /><meshBasicMaterial map={sign} toneMapped={false} /></mesh>
       {/* corkboard between fresh fridge and pantry */}
-      <mesh position={[2.62, 1.75, -1.73]}><planeGeometry args={[0.5, 0.8]} /><meshStandardMaterial map={cork} roughness={1} /></mesh>
+      <mesh position={[9.2, 1.75, -1.73]}><planeGeometry args={[0.5, 0.8]} /><meshStandardMaterial map={cork} roughness={1} /></mesh>
 
       {/* kitchen counter run: base cabinets, countertop, backsplash, sink, uppers, window */}
       <mesh position={[counterCx, 0.44, -1.42]} castShadow receiveShadow><boxGeometry args={[counterW, 0.88, 0.62]} /><meshStandardMaterial color="#5f6f66" roughness={0.6} /></mesh>

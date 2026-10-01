@@ -33,6 +33,8 @@ const DESIGNS: Record<string, Design> = {
   "lacroix-pamp": { bg: "#f7f7f2", fg: "#d2452f", title: "LaCroix", sub: "PAMPLEMOUSSE", font: "italic 700 64px Georgia, serif", deco: "dots" },
   "cold-brew": { bg: ["#3b2a20", "#1f1612"], fg: "#f3e6d3", title: "LA COLOMBE", sub: "COLD BREW · BLACK", font: "600 54px Georgia, serif" },
   "yerba-mate": { bg: ["#7cc242", "#3f8f2a"], fg: "#ffffff", title: "Guayakí", sub: "YERBA MATE", font: "italic 700 60px Georgia, serif", deco: "leaf" },
+  sprite: { bg: ["#22a45a", "#0e7a3c"], fg: "#ffffff", title: "Sprite", sub: "LEMON-LIME", font: "italic 800 70px Helvetica, Arial, sans-serif", band: "#f4d23b" },
+  "red-bull": { bg: ["#3a5fb5", "#c9ced6"], fg: "#d71f30", title: "Red Bull", sub: "ENERGY DRINK", font: "900 60px Arial Black, Arial, sans-serif", band: "#f2c400" },
   celsius: { bg: ["#ffffff", "#f4f4f4"], fg: "#ff6a13", title: "CELSIUS", sub: "SPARKLING ORANGE", font: "900 70px Arial Black, Arial, sans-serif", band: "#ff6a13" },
 };
 

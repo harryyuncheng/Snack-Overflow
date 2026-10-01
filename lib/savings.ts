@@ -5,7 +5,7 @@ import { productStats, quadrants, weeklyPersonDays, type ProductStats } from "./
 import type { Settings } from "./types";
 
 export const WEEKS_PER_MONTH = 4.33;
-export const BENCHMARK = { smallOfficeLow: 10, smallOfficeHigh: 25, source: "ZeroCater / industry budget benchmarks" };
+export const BENCHMARK = { smallOfficeLow: 10, smallOfficeHigh: 25, selfManagedLow: 50, selfManagedHigh: 150, source: "ZeroCater / industry budget benchmarks" };
 
 export type Levers = { droppedDuds: number; rightSizing: number; attendanceScaling: number; supplierSwitching: number };
 

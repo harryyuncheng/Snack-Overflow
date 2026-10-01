@@ -11,12 +11,16 @@ const Q = {
   larabar: "larabar cashew cookie", jerky: "jack link's beef jerky original", almonds: "blue diamond almonds", "trail-mix": "planters trail mix",
   seaweed: "gimme seaweed sea salt", snickers: "snickers bar", haribo: "haribo goldbears", kcups: "green mountain coffee k-cup",
   oatly: "oatly barista edition", twinings: "twinings green tea", magnum: "magnum classic ice cream", outshine: "outshine mango fruit bars",
+  sprite: "sprite lemon lime can", "red-bull": "red bull energy drink 250ml", gatorade: "gatorade cool blue", doritos: "doritos nacho cheese",
+  "sun-chips": "sunchips harvest cheddar", goldfish: "goldfish cheddar crackers", "cheez-it": "cheez-it original", pringles: "pringles original",
+  oreo: "oreo original cookies", belvita: "belvita blueberry", clif: "clif bar chocolate chip", rxbar: "rxbar chocolate sea salt",
+  "rice-krispies": "rice krispies treats", mms: "m&m's peanut", twix: "twix", "sour-patch": "sour patch kids", welchs: "welch's fruit snacks mixed fruit",
 };
 const ok = [];
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 for (const [id, q] of Object.entries(Q)) {
   if (fs.existsSync(`public/snacks/${id}.jpg`)) continue;
-  await sleep(7000); // OFF rate limit
+  await sleep(3500); // OFF rate limit
   try {
     const url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&json=1&page_size=8&fields=product_name,image_front_url`;
     const r = await fetch(url, { headers: { "user-agent": "SnackOverflowHackathon/0.1" } }).then((x) => x.json());

@@ -290,6 +290,92 @@
     "trial": true
   },
   {
+    "id": "sprite",
+    "name": "Sprite",
+    "brand": "Coca-Cola",
+    "category": "drinks",
+    "zone": "drink_fridge",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 24,
+    "basePrice": 14,
+    "flavorProfile": [
+      "fizzy",
+      "sweet",
+      "fresh"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 140,
+    "model3d": {
+      "shape": "can",
+      "color": "#1f9d55"
+    },
+    "emoji": "🥤",
+    "pop": 0.04,
+    "rating": 0.3,
+    "description": "Lemon-lime caffeine-free soda."
+  },
+  {
+    "id": "red-bull",
+    "name": "Red Bull Energy Drink",
+    "brand": "Red Bull",
+    "category": "drinks",
+    "zone": "drink_fridge",
+    "shelfLifeDays": 365,
+    "unitsPerCase": 24,
+    "basePrice": 42,
+    "flavorProfile": [
+      "caffeinated",
+      "fizzy",
+      "sweet"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 110,
+    "model3d": {
+      "shape": "can",
+      "color": "#1e3f8f"
+    },
+    "emoji": "⚡",
+    "pop": 0.03,
+    "rating": 0.2,
+    "description": "Energy drink with caffeine and taurine for the afternoon slump."
+  },
+  {
+    "id": "gatorade",
+    "name": "Gatorade Cool Blue",
+    "brand": "Gatorade",
+    "category": "drinks",
+    "zone": "drink_fridge",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 24,
+    "basePrice": 22,
+    "flavorProfile": [
+      "sweet",
+      "fresh"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "gluten_free",
+      "nut_free"
+    ],
+    "caloriesPerServing": 80,
+    "model3d": {
+      "shape": "bottle",
+      "color": "#2f7fd8"
+    },
+    "emoji": "💧",
+    "pop": 0.03,
+    "rating": 0.3,
+    "description": "Electrolyte sports drink, cool blue raspberry."
+  },
+  {
     "id": "chobani-plain",
     "name": "Chobani Plain Greek Yogurt",
     "brand": "Chobani",
@@ -1022,6 +1108,401 @@
     "pop": 0.05,
     "rating": 0.2,
     "description": "Fruit-flavored gummy bears."
+  },
+  {
+    "id": "doritos",
+    "name": "Doritos Nacho Cheese",
+    "brand": "Doritos",
+    "category": "chips",
+    "zone": "pantry",
+    "shelfLifeDays": 120,
+    "unitsPerCase": 40,
+    "basePrice": 24,
+    "flavorProfile": [
+      "salty",
+      "crunchy",
+      "savory",
+      "indulgent"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "nut_free"
+    ],
+    "caloriesPerServing": 150,
+    "model3d": {
+      "shape": "bag",
+      "color": "#e4402c"
+    },
+    "emoji": "🔺",
+    "pop": 0.06,
+    "rating": 0.4,
+    "description": "Nacho cheese tortilla chips."
+  },
+  {
+    "id": "sun-chips",
+    "name": "SunChips Harvest Cheddar",
+    "brand": "SunChips",
+    "category": "chips",
+    "zone": "pantry",
+    "shelfLifeDays": 120,
+    "unitsPerCase": 30,
+    "basePrice": 22,
+    "flavorProfile": [
+      "salty",
+      "crunchy",
+      "savory"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "nut_free"
+    ],
+    "caloriesPerServing": 140,
+    "model3d": {
+      "shape": "bag",
+      "color": "#f5a623"
+    },
+    "emoji": "🌾",
+    "pop": 0.03,
+    "rating": 0.4,
+    "description": "Whole grain wavy chips with cheddar."
+  },
+  {
+    "id": "goldfish",
+    "name": "Goldfish Crackers",
+    "brand": "Pepperidge Farm",
+    "category": "chips",
+    "zone": "pantry",
+    "shelfLifeDays": 180,
+    "unitsPerCase": 30,
+    "basePrice": 20,
+    "flavorProfile": [
+      "salty",
+      "crunchy"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "nut_free"
+    ],
+    "caloriesPerServing": 140,
+    "model3d": {
+      "shape": "bag",
+      "color": "#f28c28"
+    },
+    "emoji": "🐟",
+    "pop": 0.05,
+    "rating": 0.5,
+    "description": "Baked cheddar fish-shaped crackers."
+  },
+  {
+    "id": "cheez-it",
+    "name": "Cheez-It Original",
+    "brand": "Cheez-It",
+    "category": "chips",
+    "zone": "pantry",
+    "shelfLifeDays": 240,
+    "unitsPerCase": 12,
+    "basePrice": 26,
+    "flavorProfile": [
+      "salty",
+      "crunchy",
+      "savory"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "nut_free"
+    ],
+    "caloriesPerServing": 150,
+    "model3d": {
+      "shape": "box",
+      "color": "#d71f26"
+    },
+    "emoji": "🧀",
+    "pop": 0.04,
+    "rating": 0.4,
+    "description": "Baked cheese crackers."
+  },
+  {
+    "id": "pringles",
+    "name": "Pringles Original",
+    "brand": "Pringles",
+    "category": "chips",
+    "zone": "pantry",
+    "shelfLifeDays": 365,
+    "unitsPerCase": 12,
+    "basePrice": 18,
+    "flavorProfile": [
+      "salty",
+      "crunchy"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "nut_free"
+    ],
+    "caloriesPerServing": 150,
+    "model3d": {
+      "shape": "box",
+      "color": "#d4202c"
+    },
+    "emoji": "🥫",
+    "pop": 0.03,
+    "rating": 0.3,
+    "description": "Stackable potato crisps in a tube."
+  },
+  {
+    "id": "oreo",
+    "name": "Oreo Cookies",
+    "brand": "Oreo",
+    "category": "candy",
+    "zone": "pantry",
+    "shelfLifeDays": 240,
+    "unitsPerCase": 12,
+    "basePrice": 24,
+    "flavorProfile": [
+      "sweet",
+      "indulgent",
+      "crunchy"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 160,
+    "model3d": {
+      "shape": "box",
+      "color": "#1d5bbf"
+    },
+    "emoji": "🍪",
+    "pop": 0.05,
+    "rating": 0.5,
+    "description": "Chocolate sandwich cookies with creme filling."
+  },
+  {
+    "id": "belvita",
+    "name": "belVita Breakfast Biscuits",
+    "brand": "belVita",
+    "category": "bars",
+    "zone": "pantry",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 8,
+    "basePrice": 22,
+    "flavorProfile": [
+      "sweet",
+      "crunchy",
+      "light"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "nut_free"
+    ],
+    "caloriesPerServing": 230,
+    "model3d": {
+      "shape": "box",
+      "color": "#f2b705"
+    },
+    "emoji": "🥐",
+    "pop": 0.03,
+    "rating": 0.4,
+    "description": "Whole grain breakfast biscuits, blueberry."
+  },
+  {
+    "id": "clif",
+    "name": "Clif Bar Chocolate Chip",
+    "brand": "Clif",
+    "category": "bars",
+    "zone": "pantry",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 12,
+    "basePrice": 18,
+    "flavorProfile": [
+      "sweet",
+      "chewy",
+      "protein"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "vegetarian",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 250,
+    "model3d": {
+      "shape": "bar",
+      "color": "#c62828"
+    },
+    "emoji": "🧗",
+    "pop": 0.04,
+    "rating": 0.4,
+    "description": "Oat-based energy bar with chocolate chips."
+  },
+  {
+    "id": "rxbar",
+    "name": "RXBAR Chocolate Sea Salt",
+    "brand": "RXBAR",
+    "category": "bars",
+    "zone": "pantry",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 12,
+    "basePrice": 28,
+    "flavorProfile": [
+      "protein",
+      "sweet",
+      "chewy"
+    ],
+    "dietaryTags": [
+      "gluten_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 210,
+    "model3d": {
+      "shape": "bar",
+      "color": "#5d4037"
+    },
+    "emoji": "🥚",
+    "pop": 0.02,
+    "rating": 0.5,
+    "description": "Egg white protein bar with dates and nuts."
+  },
+  {
+    "id": "rice-krispies",
+    "name": "Rice Krispies Treats",
+    "brand": "Kellogg's",
+    "category": "candy",
+    "zone": "pantry",
+    "shelfLifeDays": 270,
+    "unitsPerCase": 40,
+    "basePrice": 20,
+    "flavorProfile": [
+      "sweet",
+      "chewy"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "nut_free"
+    ],
+    "caloriesPerServing": 90,
+    "model3d": {
+      "shape": "bar",
+      "color": "#1e88e5"
+    },
+    "emoji": "⬜",
+    "pop": 0.04,
+    "rating": 0.5,
+    "description": "Marshmallow crispy rice squares."
+  },
+  {
+    "id": "mms",
+    "name": "M&M's Peanut",
+    "brand": "Mars",
+    "category": "candy",
+    "zone": "pantry",
+    "shelfLifeDays": 300,
+    "unitsPerCase": 48,
+    "basePrice": 36,
+    "flavorProfile": [
+      "sweet",
+      "crunchy",
+      "indulgent"
+    ],
+    "dietaryTags": [
+      "vegetarian",
+      "gluten_free"
+    ],
+    "caloriesPerServing": 250,
+    "model3d": {
+      "shape": "bag",
+      "color": "#f4c300"
+    },
+    "emoji": "🟡",
+    "pop": 0.05,
+    "rating": 0.4,
+    "description": "Peanut milk chocolate candies."
+  },
+  {
+    "id": "twix",
+    "name": "Twix",
+    "brand": "Mars",
+    "category": "candy",
+    "zone": "pantry",
+    "shelfLifeDays": 300,
+    "unitsPerCase": 36,
+    "basePrice": 32,
+    "flavorProfile": [
+      "sweet",
+      "crunchy",
+      "indulgent"
+    ],
+    "dietaryTags": [
+      "vegetarian"
+    ],
+    "caloriesPerServing": 250,
+    "model3d": {
+      "shape": "bar",
+      "color": "#c8a46e"
+    },
+    "emoji": "🍫",
+    "pop": 0.04,
+    "rating": 0.4,
+    "description": "Caramel cookie bars in milk chocolate."
+  },
+  {
+    "id": "sour-patch",
+    "name": "Sour Patch Kids",
+    "brand": "Sour Patch",
+    "category": "candy",
+    "zone": "pantry",
+    "shelfLifeDays": 365,
+    "unitsPerCase": 24,
+    "basePrice": 20,
+    "flavorProfile": [
+      "sour",
+      "sweet",
+      "chewy"
+    ],
+    "dietaryTags": [
+      "vegan",
+      "gluten_free",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 150,
+    "model3d": {
+      "shape": "bag",
+      "color": "#f9a825"
+    },
+    "emoji": "🍬",
+    "pop": 0.04,
+    "rating": 0.3,
+    "description": "Sour then sweet gummy candy."
+  },
+  {
+    "id": "welchs",
+    "name": "Welch's Fruit Snacks",
+    "brand": "Welch's",
+    "category": "candy",
+    "zone": "pantry",
+    "shelfLifeDays": 365,
+    "unitsPerCase": 40,
+    "basePrice": 18,
+    "flavorProfile": [
+      "sweet",
+      "chewy",
+      "fresh"
+    ],
+    "dietaryTags": [
+      "gluten_free",
+      "nut_free",
+      "dairy_free"
+    ],
+    "caloriesPerServing": 80,
+    "model3d": {
+      "shape": "bag",
+      "color": "#7b1fa2"
+    },
+    "emoji": "🍇",
+    "pop": 0.04,
+    "rating": 0.4,
+    "description": "Fruit snacks made with real fruit."
   },
   {
     "id": "kcups",
