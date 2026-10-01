@@ -113,11 +113,11 @@ export default function Dashboard() {
                 <Tooltip formatter={(v, n) => [usd(Number(v)), n]} contentStyle={{ borderRadius: 12, border: "1px solid #e5e7eb", boxShadow: "none" }} />
                 <Bar dataKey="spend" name="Spend" radius={[3, 3, 0, 0]}>{weekly.map((w, k) => <Cell key={k} fill={w.agent ? "#e4f222" : "#d3d3d3"} />)}</Bar>
                 <Line dataKey="waste" name="Waste" stroke="#0c0a08" strokeWidth={1.5} dot={false} />
-                {weekly.findIndex((w) => w.agent) > 0 && <ReferenceLine x={weekly.find((w) => w.agent)!.week} stroke="#0c0a08" strokeDasharray="3 3" label={{ value: "Snack Overflow on", fontSize: 11, fill: "#0c0a08", position: "insideTopLeft" }} />}
+                {weekly.findIndex((w) => w.agent) > 0 && <ReferenceLine x={weekly.find((w) => w.agent)!.week} stroke="#0c0a08" strokeDasharray="3 3" label={{ value: "SnackOverflow on", fontSize: 11, fill: "#0c0a08", position: "insideTopLeft" }} />}
               </ComposedChart>
             </ResponsiveContainer>
           </div>
-          <div className="text-[12px] text-ash"><span className="mr-1 inline-block h-2 w-2 rounded-sm bg-smoke" />before · <span className="mr-1 inline-block h-2 w-2 rounded-sm bg-highlight" />with Snack Overflow · line = $ expired</div>
+          <div className="text-[12px] text-ash"><span className="mr-1 inline-block h-2 w-2 rounded-sm bg-smoke" />before · <span className="mr-1 inline-block h-2 w-2 rounded-sm bg-highlight" />with SnackOverflow · line = $ expired</div>
         </div>
         <div className="card">
           <div className="label">Where the savings come from · per month</div>
@@ -206,7 +206,7 @@ export default function Dashboard() {
           <summary className="cursor-pointer text-[15px]">How we calculate this</summary>
           <ul className="mt-3 list-disc space-y-1.5 pl-5 text-[13px] text-ash">
             <li><span className="text-ink">Before:</span> a fixed weekly basket sized for full headcount ({data.office.headcount}) × 5 days with a 10% cushion, bought in whole cases from one supplier, no consumption data. Two weeks of that are in the timeline; eight more weeks of history sit behind it.</li>
-            <li><span className="text-ink">With Snack Overflow:</span> demand = recent units eaten per in-office person-day × next week’s hybrid attendance ({Object.entries(data.office.inOfficeDays).map(([d, v]) => `${d} ${Math.round(v * 100)}%`).join(", ")}) + one day of safety stock, capped by shelf life. Duds (bottom velocity and net-negative votes) are dropped and donated; the top request cluster gets a trial.</li>
+            <li><span className="text-ink">With SnackOverflow:</span> demand = recent units eaten per in-office person-day × next week’s hybrid attendance ({Object.entries(data.office.inOfficeDays).map(([d, v]) => `${d} ${Math.round(v * 100)}%`).join(", ")}) + one day of safety stock, capped by shelf life. Duds (bottom velocity and net-negative votes) are dropped and donated; the top request cluster gets a trial.</li>
             <li><span className="text-ink">Time:</span> {data.settings.minutes.countPerSku} min per item to count twice a week, {data.settings.minutes.pollingPerWeek} min/week of Slack polls, {data.settings.minutes.orderingPerOrder} min per order, {data.settings.minutes.receiptPerOrder} min per order chasing receipts, {data.settings.minutes.reconciliationPerMonth} min/month reconciling.</li>
             <li><span className="text-ink">Context:</span> ZeroCater surveyed 54 Bay Area companies spending ~$14.8k/month on snacks; 59% run the program themselves. Workplace waste-tracking studies show 23–51% less food waste. Fooda finds ~20% of items cause ~80% of waste.</li>
             <li>Company, people and prices are sample data. Product photos: Open Food Facts (CC BY-SA).</li>

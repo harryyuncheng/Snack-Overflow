@@ -62,7 +62,7 @@ export function generateSeed(now = Date.now()) {
     });
     orders.push({
       id: `base-hist-${w + 1}`, supplier: BASELINE_SUPPLIER, lines, totalUsd: round2(lines.reduce((a, l) => a + l.cases * l.casePrice, 0)),
-      status: "received", receiptAttached: r() < 0.4, rationale: "Baseline: fixed weekly basket by headcount (pre-Snack Overflow).", createdAt: new Date(at).toISOString(), kind: "baseline",
+      status: "received", receiptAttached: r() < 0.4, rationale: "Baseline: fixed weekly basket by headcount (pre-SnackOverflow).", createdAt: new Date(at).toISOString(), kind: "baseline",
     });
     // expiry waste in the baseline concentrated in perishables & duds
     for (const p of live) {

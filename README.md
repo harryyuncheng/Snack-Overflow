@@ -1,7 +1,7 @@
-# Snack Overflow 🥞
+# SnackOverflow 🥞
 *Your office snacks, stacked by data.* Built for the Ramp × Blueprint "Amp it Up 2026" hackathon.
 
-Snack Overflow runs a self-managed office snack program end to end. It shows what's in the pantry in a live 3D kitchen and learns what people actually eat and like from consumption, votes and natural-language requests. It drafts budget-aware orders across suppliers, catches expiring items, and pays on a Ramp fund with receipts attached automatically. The impact dashboard shows the $, hours and waste saved against an explicit baseline.
+SnackOverflow runs a self-managed office snack program end to end. It shows what's in the pantry in a live 3D kitchen and learns what people actually eat and like from consumption, votes and natural-language requests. It drafts budget-aware orders across suppliers, catches expiring items, and pays on a Ramp fund with receipts attached automatically. The impact dashboard shows the $, hours and waste saved against an explicit baseline.
 
 > All company, employee, product and price data is **fictional sample data** (Dunder Mifflin, Scranton, 60 employees, hybrid).
 
@@ -33,7 +33,7 @@ Time saved comes from editable minute assumptions (counting, polling, ordering, 
 
 ## Architecture
 - `lib/seed.ts`: deterministic seeded generator (fixed RNG). `lib/catalog.ts`: 43 real-brand products with zones, flavors, dietary tags and 3D shapes. Photos come from Open Food Facts via `scripts/fetch-images.mjs` → `public/snacks/`.
-- `lib/timeline.ts`: hourly simulation (8:00–18:00 workdays) covering week 1 as the old fixed basket and week 2+ with Snack Overflow on, plus a projected next week. It produces the slider frames, events, current inventory, consumption, waste and orders.
+- `lib/timeline.ts`: hourly simulation (8:00–18:00 workdays) covering week 1 as the old fixed basket and week 2+ with SnackOverflow on, plus a projected next week. It produces the slider frames, events, current inventory, consumption, waste and orders.
 - `lib/store.ts`: in-memory repository on `globalThis`. Product and category embeddings are precomputed at boot.
 - `lib/embeddings/`: `Embedder` interface. The default `local-lite` is an offline concept-expanded hashed embedder (384-d), with hosted Voyage and OpenAI behind the same interface.
 - `lib/semantic.ts`: search (with negation like "isn't chips" and hard dietary filters), request matching, threshold clustering, substitutes.

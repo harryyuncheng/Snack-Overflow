@@ -20,7 +20,7 @@ export default function Timeline({ tl, index, onChange, playing, setPlaying }: {
   const frame = tl.frames[index];
   const pos = (iso: string) => { const t = Date.parse(iso); const i = tl.frames.findIndex((f) => Date.parse(f.t) >= t); return ((i < 0 ? n : i) / n) * 100; };
   const switchPos = pos(tl.switchAt), nowPos = (tl.nowIndex / n) * 100;
-  const phase = frame.projected ? "Projected" : Date.parse(frame.t) < Date.parse(tl.switchAt) ? "Before Snack Overflow" : "Snack Overflow on";
+  const phase = frame.projected ? "Projected" : Date.parse(frame.t) < Date.parse(tl.switchAt) ? "Before SnackOverflow" : "SnackOverflow on";
   const recent = tl.events.filter((e) => Date.parse(e.t) <= Date.parse(frame.t) && !["restock_request", "back_in_stock"].includes(e.kind)).slice(-1)[0];
   const units = frame.stock.reduce((a, b) => a + b, 0), skus = frame.stock.filter((x) => x > 0).length;
   return (
@@ -39,7 +39,7 @@ export default function Timeline({ tl, index, onChange, playing, setPlaying }: {
           <input type="range" className="timeline relative w-full" min={0} max={n} value={index} onChange={(e) => { setPlaying(false); onChange(+e.target.value); }} aria-label="Timeline" />
           <div className="relative h-4 text-[10px] uppercase tracking-[0.18em] text-ash">
             <span className="absolute" style={{ left: 0 }}>2 weeks ago</span>
-            <span className="absolute -translate-x-1/2 text-paper" style={{ left: `${switchPos}%` }}>▲ Snack Overflow on</span>
+            <span className="absolute -translate-x-1/2 text-paper" style={{ left: `${switchPos}%` }}>▲ SnackOverflow on</span>
             <span className="absolute -translate-x-1/2 text-highlight" style={{ left: `${nowPos}%` }}>▲ Now</span>
             <span className="absolute right-0">Next week</span>
           </div>

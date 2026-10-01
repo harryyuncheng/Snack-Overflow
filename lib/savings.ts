@@ -58,7 +58,7 @@ export function timeSaved(minutes: Settings["minutes"], skuCount: number) {
   return { rows, hoursPerMonth: round2(saved / 60) };
 }
 
-/** Measured $ and kg of expiry waste per month: baseline weeks vs weeks since Snack Overflow switched on (donations excluded). */
+/** Measured $ and kg of expiry waste per month: baseline weeks vs weeks since SnackOverflow switched on (donations excluded). */
 export function wasteSummary(db: DB) {
   const switchAt = Date.parse(db.timeline.switchAt);
   const base = db.waste.filter((w) => w.period === "baseline");

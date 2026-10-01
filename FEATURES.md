@@ -1,4 +1,4 @@
-# Snack Overflow: feature backlog
+# SnackOverflow: feature backlog
 
 The MVP covers: the walkable 3D kitchen with real product photos, a two-week timeline slider, semantic multi-ask search, crowdsourced votes, requests and restock flags, the forecasting order agent paid on a mock Ramp fund, and the savings dashboard. Everything below is a stretch goal.
 

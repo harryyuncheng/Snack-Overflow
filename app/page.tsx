@@ -47,7 +47,7 @@ export default function Kitchen() {
     } satisfies ItemStatus]));
   }, [data, atNow]);
 
-  if (!data || !tl) return <div className="p-8 text-sm text-ash">Loading Snack Overflow…</div>;
+  if (!data || !tl) return <div className="p-8 text-sm text-ash">Loading SnackOverflow…</div>;
   const highlights = search ? new Map(search.results.filter((r) => r.inStock && r.score > 0.2).slice(0, 4).map((r) => [r.productId, r.score])) : null;
   const name = (id: string) => data.products.find((p) => p.id === id)?.name ?? id;
 

@@ -8,7 +8,7 @@ export default function Nav() {
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-6 border-b border-hairline bg-paper px-5 shadow-[inset_0_0_2px_rgba(255,255,255,0.6)]">
       <Link href="/" className="flex items-center gap-2 text-[17px] tracking-tight">
-        <span className="grid h-6 w-6 place-items-center rounded-md bg-highlight text-[13px]">S</span>{APP_NAME}
+        <img src="/snackoverflow-icon.svg" alt="" width={28} height={28} />{APP_NAME}
       </Link>
       <nav className="flex gap-1">
         {[["/", "Kitchen"], ["/dashboard", "Dashboard"]].map(([href, label]) => (

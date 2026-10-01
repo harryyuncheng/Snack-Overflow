@@ -12,7 +12,7 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
   const txIds: string[] = [];
   try {
     for (const [supplier, amount] of bySupplier) {
-      const memo = `Snack Overflow order ${o.id}: ${o.lines.filter((l) => l.supplier === supplier).length} SKUs for ${db.office.name}`;
+      const memo = `SnackOverflow order ${o.id}: ${o.lines.filter((l) => l.supplier === supplier).length} SKUs for ${db.office.name}`;
       const tx = await ramp.purchase({ fundId: db.office.rampFundId!, merchant: supplier, amount, memo, rationale: "Approved weekly snack restock within monthly fund" });
       txIds.push(tx.id);
     }

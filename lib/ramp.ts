@@ -27,7 +27,7 @@ class MockRamp implements RampAdapter {
     for (const o of db.orders.filter((x) => x.kind === "agent" && x.status === "received" && Date.parse(x.createdAt) >= month.getTime())) {
       for (const sup of new Set(o.lines.map((l) => l.supplier))) {
         const amount = round2(o.lines.filter((l) => l.supplier === sup).reduce((a, l) => a + l.cases * l.casePrice, 0));
-        this.txs.unshift({ id: `txn_${o.id}_${sup}`, fundId: this.fund.id, merchant: sup, amount, at: o.createdAt, memo: `Snack Overflow ${o.id}`, receiptAttached: true, accountingCategory: "Office Snacks & Meals" });
+        this.txs.unshift({ id: `txn_${o.id}_${sup}`, fundId: this.fund.id, merchant: sup, amount, at: o.createdAt, memo: `SnackOverflow ${o.id}`, receiptAttached: true, accountingCategory: "Office Snacks & Meals" });
         this.fund.spent = round2(this.fund.spent + amount);
       }
     }

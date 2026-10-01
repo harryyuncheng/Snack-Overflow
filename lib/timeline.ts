@@ -6,7 +6,7 @@ import { BASELINE_SUPPLIER, DAY, baselineWeeklyUnits, dayKey, rng, round2, start
 
 /**
  * Two-week+ hourly simulation of the kitchen, ending in a short projected future.
- * Week 1 runs the old way (fixed headcount basket, one supplier); Snack Overflow switches on at the start of week 2.
+ * Week 1 runs the old way (fixed headcount basket, one supplier); SnackOverflow switches on at the start of week 2.
  * Deliveries arrive Mon (full order) and Thu (perishables top-up) at 8am. Frames are every workday hour 8:00–18:00.
  */
 export type TimelineEvent = {
@@ -59,7 +59,7 @@ export function simulate(args: { now: number; office: Office; products: Product[
     const thursday = new Date(t).getDay() === 4;
     const lines: Order["lines"] = [];
     if (agent && t === switchAt) {
-      events.push({ t: iso(t), kind: "switch", text: "Snack Overflow switched on: orders now follow consumption, votes and requests." });
+      events.push({ t: iso(t), kind: "switch", text: "SnackOverflow switched on: orders now follow consumption, votes and requests." });
       for (const id of DUDS) {
         active.delete(id);
         const left = stockOf(id);
@@ -95,7 +95,7 @@ export function simulate(args: { now: number; office: Office; products: Product[
     const suppliers = [...new Set(lines.map((l) => l.supplier))];
     orders.push({
       id: `${agent ? "ord" : "base"}-${new Date(t).toISOString().slice(0, 10)}`, supplier: suppliers.length > 1 ? "multi" : suppliers[0], lines, totalUsd: total,
-      status: projected ? "draft" : "received", receiptAttached: agent, rationale: agent ? "Agent order: forecast from consumption, attendance and requests." : "Baseline: fixed basket by headcount (pre-Snack Overflow).",
+      status: projected ? "draft" : "received", receiptAttached: agent, rationale: agent ? "Agent order: forecast from consumption, attendance and requests." : "Baseline: fixed basket by headcount (pre-SnackOverflow).",
       createdAt: iso(t), kind: agent ? "agent" : "baseline", memo: agent && !projected ? "Paid on Ramp \"Office Snacks\" fund via agent card; receipt auto-attached." : undefined,
     });
     events.push({ t: iso(t), kind: projected ? "scheduled" : "delivery", qty: lines.reduce((a, l) => a + l.cases, 0), usd: total, projected,

@@ -1,4 +1,4 @@
-export const APP_NAME = "Snack Overflow";
+export const APP_NAME = "SnackOverflow";
 export const TAGLINE = "Your office snacks, stacked by data.";
 
 export type Zone = "drink_fridge" | "fresh_fridge" | "pantry" | "coffee_bar" | "freezer" | "fruit_bowl";
