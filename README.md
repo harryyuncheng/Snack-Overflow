@@ -18,6 +18,7 @@ No keys needed: Ramp, vision and LLM all default to mock, and embeddings run loc
 |---|---|
 | `/` **Kitchen** | Walk through a 3D office kitchen (drink fridge, fresh fridge, pantry, coffee bar, fruit bowl, freezer) stocked with real product photos. A **timeline slider** scrubs two weeks of hourly history plus a projected week: shelves empty through the day, deliveries arrive, duds get dropped and donated, Yerba Mate gets trialed. Ask in plain language, including multi-part asks ("meat, beef jerky and protein" → Jack Link's). Vote, flag **Restock**, and see the shared kitchen feed. |
 | `/dashboard` | Savings / time / waste counters, the agent's next order → **Approve & pay with Ramp**, the Ramp fund, weekly spend & waste, savings by lever, every product (stock, velocity, liked %, supplier), request clusters, order history, methodology. |
+| `/camera` | Phone camera mode. Sends a photo every 3s to Claude Haiku, which counts Coca-Cola and Canada Dry cans. Each confident reading sets stock right away: fewer cans log camera consumption, more cans add a batch. The kitchen refreshes every second and shows a toast for each changed can with its new stock. Needs `ANTHROPIC_API_KEY`. Phones only allow the camera over HTTPS, so open it through a tunnel such as `npx cloudflared tunnel --url http://localhost:3000`. |
 
 Stretch features live in [`FEATURES.md`](FEATURES.md). The kitchen uses the Ramp design system ([`DESIGN.md`](DESIGN.md)).
 

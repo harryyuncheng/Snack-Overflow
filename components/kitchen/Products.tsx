@@ -7,6 +7,7 @@ import * as THREE from "three";
 import type { Product } from "@/lib/types";
 import type { Location } from "@/lib/layout";
 import { SLOTS_PER_SHELF } from "@/lib/layout";
+import { CAN_IDS } from "@/lib/cans";
 import { BOWL, ZONES } from "./zones";
 import { labelTexture, loadPhoto, rand, shelfTagTexture } from "./textures";
 import { canGeometry, canLabelTexture } from "./cans";
@@ -229,11 +230,11 @@ function ProductUnitsInner({ p, loc, stock, price, visual, onHover, onSelect }: 
     m.instanceMatrix.needsUpdate = true;
     m.computeBoundingSphere();
   }, [units]);
-  // shelves read as stocked: visible units saturate with stock (front rows fill first); bowl fruit stays 1:1
-  const visible = loc.zone === "fruit_bowl"
+  // shelves read as stocked: visible units saturate with stock (front rows fill first); bowl fruit and camera-counted cans stay 1:1
+  const visible = loc.zone === "fruit_bowl" || CAN_IDS.includes(p.id)
     ? Math.min(units.length, Math.max(0, Math.ceil(stock / (PER_UNIT[p.id] ?? 1))))
     : stock <= 0 ? 0 : Math.min(units.length, Math.max(1, Math.ceil(units.length * (1 - Math.exp(-stock / 12)))));
-  useLayoutEffect(() => { if (mesh.current) mesh.current.count = visible; }, [visible]);
+  useLayoutEffect(() => { if (mesh.current) mesh.current.count = visible; }, [visible, units]);
 
   const v = useRef(visual);
   v.current = visual;
@@ -256,7 +257,7 @@ function ProductUnitsInner({ p, loc, stock, price, visual, onHover, onSelect }: 
     }
     if (s.overlay === "none" || s.overlay === "dietary") {
       if (s.nearExpiry) for (const m of mats.all) m.emissive.setRGB(1, 0.16, 0.08).multiplyScalar(0.2 + 0.4 * pulse);
-      else if (s.lowStock) for (const m of mats.all) m.emissive.setRGB(1, 0.62, 0).multiplyScalar(0.28);
+      else if (s.lowStock && !CAN_IDS.includes(p.id)) for (const m of mats.all) m.emissive.setRGB(1, 0.62, 0).multiplyScalar(0.28);
     }
     if (s.highlight) for (const m of mats.all) m.emissive.copy(HIGHLIGHT).multiplyScalar(0.35 + 0.45 * pulse);
     if (s.dimmed) for (const m of mats.all) m.opacity = 0.14;

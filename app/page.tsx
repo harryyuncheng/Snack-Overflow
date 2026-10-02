@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { post, usd, useSnapshot, ZONE_LABEL } from "@/components/useSnapshot";
 import AskBox from "@/components/AskBox";
 import Timeline from "@/components/Timeline";
@@ -17,7 +17,7 @@ const ZONES = ["overview", "drink_fridge", "fresh_fridge", "pantry", "coffee_bar
 const EXAMPLES = ["I want meat, beef jerky and protein", "salty and crunchy that isn't chips, gluten-free", "caffeine that isn't coffee", "our drinks are bad"];
 
 export default function Kitchen() {
-  const { data, refresh } = useSnapshot();
+  const { data, refresh } = useSnapshot(1000);
   const [zone, setZone] = useState<Zone | "overview">("overview");
   const [overlay, setOverlay] = useState<Overlay>("none");
   const [dietary, setDietary] = useState("vegetarian");
@@ -46,6 +46,20 @@ export default function Kitchen() {
       netRating: s.netRating, daysToExpiry: atNow ? s.daysToExpiry : null, perDay: s.perDay,
     } satisfies ItemStatus]));
   }, [data, atNow]);
+
+  // toast each new camera scan; the first load only records where the scan list starts
+  const seenScan = useRef<string | null>(null);
+  useEffect(() => {
+    if (!data) return;
+    const s = data.scans[0];
+    const prev = seenScan.current;
+    seenScan.current = s?.id ?? "";
+    if (prev === null || !s || s.id === prev) return;
+    const label = (id: string) => data.products.find((p) => p.id === id)?.name ?? id;
+    const stockOf = (id: string) => data.inventory.filter((b) => b.productId === id).reduce((a, b) => a + b.quantity, 0);
+    setToast(`📷 ${s.diffFromExpected.map((d) => `${label(d.productId)}: ${Math.abs(d.delta)} ${d.delta < 0 ? "removed" : "added"}, ${stockOf(d.productId)} in stock`).join(" · ")}`);
+    setTimeout(() => setToast(null), 5000);
+  }, [data]);
 
   if (!data || !tl) return <div className="p-8 text-sm text-ash">Loading Snack Overflow…</div>;
   const highlights = search ? new Map(search.results.filter((r) => r.inStock && r.score > 0.2).slice(0, 4).map((r) => [r.productId, r.score])) : null;
