@@ -53,12 +53,20 @@ export type WasteEvent = {
   costUsd: number; kg: number; at: string; donated?: boolean; period: "baseline" | "live";
 };
 
-export type OrderLine = { productId: string; cases: number; casePrice: number; supplier: SupplierId; note?: string };
+export type OrderLine = { productId: string; cases: number; casePrice: number; supplier: SupplierId; note?: string;
+  reason?: "forecast" | "restock" | "trial" | "low_stock"; units?: number; onHand?: number; baselineCasePrice?: number };
+export type OrderInsight =
+  | { kind: "forecast"; personDays: number; headcount: number; deliveryAt: string }
+  | { kind: "dropped"; productId: string; eaten: number; netRating: number; wasted: number; substituteId?: string; similarity?: number }
+  | { kind: "trial"; productId: string; cluster: string; requests: number; votes: number }
+  | { kind: "trimmed"; productId: string }
+  | { kind: "suppliers"; split: { supplier: string; usd: number }[]; savedUsd: number };
 export type Order = {
   id: string; supplier: string; lines: OrderLine[]; totalUsd: number;
   status: "draft" | "pending_approval" | "approved" | "placed" | "received";
   rampTransactionId?: string; receiptAttached: boolean; rationale: string; createdAt: string;
   kind: "baseline" | "agent"; memo?: string;
+  insights?: OrderInsight[]; deliveryAt?: string; budgetCap?: number;
 };
 
 export type ShelfScan = {

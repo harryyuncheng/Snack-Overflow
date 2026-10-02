@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { Bar, CartesianGrid, ComposedChart, Line, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis, BarChart, Cell } from "recharts";
 import { post, usd, useSnapshot, when } from "@/components/useSnapshot";
 import Thumb from "@/components/Thumb";
+import OrderDraft from "@/components/OrderDraft";
 import type { Order } from "@/lib/types";
 
 const STATUS: Record<string, string> = { star: "Star", guilty: "Guilty pleasure", aspirational: "Aspirational", dud: "Dropped (dud)" };
@@ -60,30 +61,9 @@ export default function Dashboard() {
       </section>
 
       <section className="mx-auto mt-10 grid max-w-[1200px] gap-5 px-5 lg:grid-cols-3">
-        <div className="card lg:col-span-2">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <div className="label">Next order · drafted by the agent</div>
-              <div className="mt-1 text-2xl tracking-tight">{draft ? `${draft.lines.length} items · ${usd(draft.totalUsd, 2)}` : "Ready when you are"}</div>
-            </div>
-            {draft ? <button className="btn" onClick={() => approve(draft)} disabled={busy}>Approve & pay with Ramp</button> : <button className="btn" onClick={draftOrder} disabled={busy}>{busy ? "Forecasting…" : "Draft next order"}</button>}
-          </div>
-          {err && <div className="mt-3 wash text-sm">{err}</div>}
-          {draft ? (
-            <>
-              <div className="wash mt-4 whitespace-pre-wrap text-[13px] leading-relaxed">{draft.rationale}</div>
-              <table className="mt-4 w-full text-[13px]">
-                <thead><tr className="text-left"><th className="label pb-2">Item</th><th className="label pb-2">Cases</th><th className="label pb-2">Supplier</th><th className="label pb-2 text-right">vs. old supplier</th><th className="label pb-2 text-right">Line</th></tr></thead>
-                <tbody>{draft.lines.map((l) => { const p = prod(l.productId); const save = (baselinePrice(l.productId) - l.casePrice) * l.cases; return (
-                  <tr key={l.productId} className="border-t border-hairline">
-                    <td className="py-1.5"><div className="flex items-center gap-2"><Thumb src={p.image} emoji={p.emoji} size={28} />{p.name}{l.note?.startsWith("trial") && <span className="tag-hi">trial</span>}{l.note?.startsWith("restock") && <span className="tag">staff request</span>}</div></td>
-                    <td>{l.cases}</td><td className="text-ash">{l.supplier.replace("_", " ")}</td>
-                    <td className="text-right">{save > 0.5 ? `−${usd(save, 2)}` : <span className="text-ash">–</span>}</td><td className="text-right">{usd(l.cases * l.casePrice, 2)}</td>
-                  </tr>); })}</tbody>
-              </table>
-            </>
-          ) : <p className="mt-3 max-w-xl text-sm text-ash">Forecasts each item from what was actually eaten per in-office person-day, next week’s hybrid attendance, shelf life, votes and the request board — then picks the cheapest supplier and stays inside the Ramp fund.</p>}
-        </div>
+        <OrderDraft draft={draft} products={data.products} fundLeft={data.ramp.fund.limit - data.ramp.fund.spent} busy={busy}
+          autoApproveUnder={data.settings.autoApproveUnder} onDraft={draftOrder} onApprove={approve} />
+        {err && <div className="wash text-sm lg:col-span-3">{err}</div>}
         <div className="card">
           <div className="flex items-center justify-between"><div className="label">Ramp · Office Snacks fund</div><span className="tag">{data.ramp.mode === "mock" ? "Ramp sandbox (mock)" : "Ramp sandbox"}</span></div>
           <div className="mt-2 text-2xl tracking-tight">{usd(data.ramp.fund.limit - data.ramp.fund.spent, 2)} <span className="text-sm text-ash">left this month</span></div>
