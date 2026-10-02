@@ -257,7 +257,7 @@ function ProductUnitsInner({ p, loc, stock, price, visual, onHover, onSelect }: 
     }
     if (s.overlay === "none" || s.overlay === "dietary") {
       if (s.nearExpiry) for (const m of mats.all) m.emissive.setRGB(1, 0.16, 0.08).multiplyScalar(0.2 + 0.4 * pulse);
-      else if (s.lowStock) for (const m of mats.all) m.emissive.setRGB(1, 0.62, 0).multiplyScalar(0.28);
+      else if (s.lowStock && !CAN_IDS.includes(p.id)) for (const m of mats.all) m.emissive.setRGB(1, 0.62, 0).multiplyScalar(0.28);
     }
     if (s.highlight) for (const m of mats.all) m.emissive.copy(HIGHLIGHT).multiplyScalar(0.35 + 0.45 * pulse);
     if (s.dimmed) for (const m of mats.all) m.opacity = 0.14;
